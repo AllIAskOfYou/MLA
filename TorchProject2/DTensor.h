@@ -6,7 +6,7 @@
 class DTensor {
 public:
 	DTensor();
-	DTensor(at::IntArrayRef size, at::TensorOptions& options);
+	DTensor(int64_t maxSize, int64_t dim, int64_t lastN, at::TensorOptions& options);
 
 	at::Tensor get(int64_t index);
 
@@ -16,7 +16,7 @@ public:
 
 private:
 	int64_t start = 0;
-	at::IntArrayRef size = 0;
+	int64_t maxSize = 0;
 	at::Tensor tensor;
 public:
 	at::Tensor a;

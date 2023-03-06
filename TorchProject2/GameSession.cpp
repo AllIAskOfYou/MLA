@@ -21,9 +21,9 @@ GameSession::GameSession(
 	oaModelOptimizer(oaModelOptimizer),
 	envModelOptimizer(envModelOptimizer)
 {
-	states = DTensor({ batch_size + 1, s_n, last_n }, floatOptions);
-	aActions = DTensor({ batch_size + 1, 1, last_n }, intOptions);
-	oActions = DTensor({ batch_size + 1, 1, last_n }, intOptions);
+	states = DTensor(batch_size + 1, s_n, last_n, floatOptions);
+	aActions = DTensor(batch_size + 1, a_n, last_n, floatOptions);
+	oActions = DTensor(batch_size + 1, a_n, last_n, floatOptions);
 
 	s = torch::zeros({ s_n });
 	oa = torch::zeros({ 1 });
@@ -46,10 +46,10 @@ void GameSession::start() {
 
 			// save new state and actions - prepare data for learning
 			states.push(s);
-			//aActions.push(torch::one_hot(next_aa.to(intOptions), a_n).squeeze());
-			//oActions.push(torch::one_hot(oa.to(intOptions), a_n).squeeze());
-			aActions.push(next_aa.to(intOptions));
-			oActions.push(oa.to(intOptions));
+			aActions.push(torch::one_hot(next_aa.to(intOptions), a_n).squeeze());
+			oActions.push(torch::one_hot(oa.to(intOptions), a_n).squeeze());
+			//aActions.push(next_aa.to(intOptions));
+			//oActions.push(oa.to(intOptions));
 
 			// update oponent action model and environment model
 			updateOaModel();
@@ -64,6 +64,9 @@ void GameSession::start() {
 			//std::cout << states.toTensor() << std::endl;
 
 			next_oa = getNextOa();
+			std::cout << next_oa << std::endl;
+			next_oa = next_oa.argmax().to(floatOptions);
+			/*
 			std::cout << next_oa << " <-----> " << next_oa.detach() << std::endl;
 			next_oa = next_oa
 				.argmax();
@@ -72,7 +75,7 @@ void GameSession::start() {
 
 			std::cout << next_aa << " :::: " << next_oa << std::endl;
 
-			/*
+			
 			envModelOptimizer->zero_grad();
 			torch::Tensor next_s = envModel.forward(
 				states.a.index({ Slice(-2, -1) }),
@@ -140,6 +143,7 @@ torch::Tensor GameSession::decideNextAction() {
 
 	torch::Tensor s = states.a[0].repeat({ a_n });
 
+	/*
 	for (int i = 0; i < a_n; i++) {
 		next_states = envModel.forward(
 			states.a.index({ Slice(-1) }),
@@ -147,6 +151,6 @@ torch::Tensor GameSession::decideNextAction() {
 
 		);
 	}
-
+	*/
 	return torch::zeros({1,2});
 }
