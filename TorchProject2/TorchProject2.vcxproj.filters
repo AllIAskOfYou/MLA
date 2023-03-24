@@ -16,6 +16,12 @@
     <ClCompile Include="GameSession.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ReplayBuffer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RLA.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Source Files">
@@ -30,6 +36,15 @@
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="GameSession.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ReplayBuffer.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RLA.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="tensoroptions.h">
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>

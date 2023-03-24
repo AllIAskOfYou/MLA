@@ -2,22 +2,20 @@
 
 #include <ATen/ATen.h>
 #include <stdint.h>
+#include <c10/core/DefaultDtype.h>
 
 class DTensor {
 public:
 	DTensor();
-	DTensor(int64_t maxSize, int64_t dim, int64_t lastN, at::TensorOptions& options);
+	DTensor(at::IntArrayRef size, at::TensorOptions& options);
 
 	at::Tensor get(int64_t index);
 
 	void push(at::Tensor value);
 
-	at::Tensor toTensor();
+	at::Tensor DTensor::index(at::Tensor indices);
 
 private:
 	int64_t start = 0;
-	int64_t maxSize = 0;
 	at::Tensor tensor;
-public:
-	at::Tensor a;
 };
