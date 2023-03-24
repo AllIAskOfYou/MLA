@@ -4,48 +4,60 @@
     <ClCompile Include="example-app.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="PipeServer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="DTensor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="GameSession.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ReplayBuffer.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="DQN.cpp">
+      <Filter>Source Files\algorithms</Filter>
     </ClCompile>
-    <ClCompile Include="RLA.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="DTensor.cpp">
+      <Filter>Source Files\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="ReplayBuffer.cpp">
+      <Filter>Source Files\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="PipeServer.cpp">
+      <Filter>Source Files\ipc</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Source Files">
       <UniqueIdentifier>{F23262D7-7A28-3657-BA8F-128552BB4444}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\algorithms">
+      <UniqueIdentifier>{2d9fb4a7-a52f-4ccb-9365-c8dab09e88b0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\utils">
+      <UniqueIdentifier>{7f908916-8854-4dfc-a337-8a47f61c5e3b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ipc">
+      <UniqueIdentifier>{e8771bcb-60ef-4db0-9fda-4ee0338b058c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="PipeServer.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="DTensor.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
     <ClInclude Include="GameSession.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="ReplayBuffer.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
     <ClInclude Include="RLA.h">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\algorithms</Filter>
+    </ClInclude>
+    <ClInclude Include="DQN.h">
+      <Filter>Source Files\algorithms</Filter>
+    </ClInclude>
+    <ClInclude Include="DTensor.h">
+      <Filter>Source Files\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="ReplayBuffer.h">
+      <Filter>Source Files\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="PipeServer.h">
+      <Filter>Source Files\ipc</Filter>
     </ClInclude>
     <ClInclude Include="tensoroptions.h">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\utils</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

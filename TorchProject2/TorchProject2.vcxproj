@@ -177,6 +177,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     </ProjectReference>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="DQN.h" />
     <ClInclude Include="DTensor.h" />
     <ClInclude Include="GameSession.h" />
     <ClInclude Include="PipeServer.h" />
@@ -185,13 +186,13 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <ClInclude Include="tensoroptions.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="DQN.cpp" />
     <ClCompile Include="DTensor.cpp" />
     <ClCompile Include="example-app.cpp" />
     <ClCompile Include="GameSession.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="PipeServer.cpp" />
     <ClCompile Include="ReplayBuffer.cpp" />
-    <ClCompile Include="RLA.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

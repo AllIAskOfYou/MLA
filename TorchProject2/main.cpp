@@ -3,6 +3,7 @@
 #include "GameSession.h"
 #include "DTensor.h"
 #include "ReplayBuffer.h"
+#include "DQN.h"
 
 /*
 struct RegressionImpl : torch::nn::Module {
@@ -25,13 +26,14 @@ struct RegressionImpl : torch::nn::Module {
 TORCH_MODULE(Regression);
 */
 
+
 int main() {
 	std::cout << "Heyioo!!" << std::endl;
 	int64_t s_n = 1;
 	int64_t a_n = 4;
 	int64_t last_n = 1;
 	int64_t batch_size = 16;
-
+	
 	DTensor buf({ 3, 2, 3 }, torch::TensorOptions().dtype(torch::kFloat32));
 	buf.push(torch::tensor({ 1, 1, 1 }));
 	buf.push(torch::tensor({ 1, 2, 3 }));
@@ -48,7 +50,6 @@ int main() {
 	at::Tensor r = at::tensor({ 1 }, torch::TensorOptions().dtype(torch::kFloat32));
 	
 	rb.push(s, a, a, r);
-	rb.push(s+3, a, a+1, r+1);
 	RBSample rs = rb.sample(4);
 	std::cout
 		<< rs.states << "\n"
@@ -58,10 +59,21 @@ int main() {
 		<< rs.rewards << "\n"
 		<< std::endl;
 
+	DQN dqn = DQN(rb);
+	dqn.update();
+	std::shared_ptr<RLA> rla(new DQN(rb));
+
+	rb.push(s + 3, a, a + 1, r + 1);
+	rla->update();
+
+	RLA& rl = DQN(rb);
+	rl.update();
 
 
 
 
+
+	
 	/*
 
 	Regression oaModule(s_n, a_n, last_n, a_n);
