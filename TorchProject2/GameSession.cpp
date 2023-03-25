@@ -1,65 +1,53 @@
 #include "GameSession.h"
 
-using namespace torch::indexing;
-
 GameSession::GameSession(
 	int64_t s_n,
 	int64_t a_n,
-	int64_t batch_size,
-	int64_t last_n,
-	torch::nn::AnyModule oaModel,
-	std::shared_ptr<torch::optim::Optimizer> oaModelOptimizer
+	RLA& rla,
+	size_t max_itr
 ) :
 	s_n(s_n),
 	a_n(a_n),
-	batch_size(batch_size),
-	last_n(last_n),
-	oaModel(oaModel),
-	oaModelOptimizer(oaModelOptimizer)
+	rla(rla),
+	max_itr(max_itr)
 {
-	states = DTensor({ batch_size + 1, s_n, last_n }, floatOptions);
-	aActions = DTensor({ batch_size + 1, last_n }, intOptions);
-	oActions = DTensor({ batch_size + 1, last_n }, intOptions);
-	rewards = DTensor({ batch_size + 1, last_n }, intOptions);
-
-	s = torch::zeros({ s_n });
-	oa = torch::zeros({ 1 });
-	r = torch::zeros({ 1 });
-	next_aa = torch::zeros({ 1 });
+	s = at::zeros({ s_n });
+	oa = at::zeros({ 1 });
+	r = at::zeros({ 1 });
+	aa = at::zeros({ 1 });
 };
 
 void GameSession::start() {
 	if (ps.connect()) {
 		std::cout << "Yeay" << std::endl;
 
-		while (true) {
+		size_t itr = 0;
+		for (; itr < max_itr; itr++) {
 			// get new state and oponent action
 			readS = ps.recieveData(s.data_ptr<float>(), s_n);
 			readA = ps.recieveData(oa.data_ptr<float>(), 1);
 			readR = ps.recieveData(r.data_ptr<float>(), 1);
+			readTS = ps.recieveData(&ts, 1);
 
 			// if bad data, continue
-			if (readS <= 0 || readA <= 0 || readR <= 0) {
-				continue;
-			}
+			if (readS <= 0 || readA <= 0 || readR <= 0) continue;
 
-			// save new state and actions - prepare data for learning
-			states.push(s);
-			aActions.push(next_aa.to(intOptions));
-			oActions.push(oa.to(intOptions));
-			rewards.push(r.to(intOptions));
+			// save new state, actions and reward
+			rla.push(s, aa, oa, r);
 
-			// update oponent action model
-			//updateOaModel();
+			// take one update step on the policy / model
+			rla.update();
 
-			next_oa = torch::zeros({ a_n });//getNextOa();
-			std::cout << next_oa << std::endl;
-			next_oa = next_oa.argmax().to(floatOptions);
+			// if in terminal state break
+			if ((int)ts == 1) break;
 
-			float message = 2;
-			//ps.sendData(next_oa.data_ptr<float>(), 1);
-			ps.sendData(next_oa.data_ptr<float>(), next_oa.numel());
+			// get next action based on current policy and data
+			aa = rla.nextAction();
+
+			// send new action to the game
+			ps.sendData(aa.data_ptr<float>(), aa.numel());
 		}
+		std::cout << "< Session ended with " << itr << " iterations >" << std::endl;
 	}
 }
 

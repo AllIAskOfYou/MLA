@@ -2,10 +2,25 @@
 
 #include <ATen/ATen.h>
 #include "ReplayBuffer.h"
+#include <stdint.h>
 
 class RLA {
 protected:
-	RLA(ReplayBuffer& rb) : rb(rb) {}
+	RLA(ReplayBuffer& rb, int64_t batch_size) :
+		rb(rb),
+		batch_size(batch_size)
+	{}
+
+public:
+	void push(
+		at::Tensor s,
+		at::Tensor aa,
+		at::Tensor oa,
+		at::Tensor r
+	)
+	{
+		rb.push(s, aa, oa, r);
+	}
 
 public:
 	virtual void update() = 0;
@@ -13,4 +28,5 @@ public:
 
 protected:
 	ReplayBuffer& rb;
+	int64_t batch_size;
 };

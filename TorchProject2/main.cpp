@@ -5,7 +5,7 @@
 #include "ReplayBuffer.h"
 #include "DQN.h"
 
-/*
+
 struct RegressionImpl : torch::nn::Module {
 	RegressionImpl(int s_dim, int a_dim, int last_n, int out_dim)
 		: lin(torch::nn::LinearOptions(last_n * (s_dim + 2 * a_dim), out_dim))
@@ -24,15 +24,20 @@ struct RegressionImpl : torch::nn::Module {
 	torch::Tensor x;
 };
 TORCH_MODULE(Regression);
-*/
 
 
+/*
 int main() {
+	torch::nn::Module& md = RegressionImpl(1, 2, 1, 2);
+	torch::nn::AnyModule mdl = new RegressionImpl(1,2,2,1);
+
 	std::cout << "Heyioo!!" << std::endl;
 	int64_t s_n = 1;
 	int64_t a_n = 4;
 	int64_t last_n = 1;
+	int64_t buffer_size = 32;
 	int64_t batch_size = 16;
+	size_t max_itr = 100;
 	
 	DTensor buf({ 3, 2, 3 }, torch::TensorOptions().dtype(torch::kFloat32));
 	buf.push(torch::tensor({ 1, 1, 1 }));
@@ -44,31 +49,12 @@ int main() {
 	buf.push(torch::tensor({ 2 }));
 	std::cout << buf.index(torch::tensor({ 0, 2, 1 })) << std::endl;
 
-	ReplayBuffer rb(4, 2, 3);
-	at::Tensor s = at::tensor({ 7, 5, 3 }, torch::TensorOptions().dtype(torch::kFloat32));
-	at::Tensor a = at::tensor({ 1 }, torch::TensorOptions().dtype(torch::kInt64));
-	at::Tensor r = at::tensor({ 1 }, torch::TensorOptions().dtype(torch::kFloat32));
-	
-	rb.push(s, a, a, r);
-	RBSample rs = rb.sample(4);
-	std::cout
-		<< rs.states << "\n"
-		<< rs.nStates << "\n"
-		<< rs.aActions << "\n"
-		<< rs.oActions << "\n"
-		<< rs.rewards << "\n"
-		<< std::endl;
-
-	DQN dqn = DQN(rb);
-	dqn.update();
-	std::shared_ptr<RLA> rla(new DQN(rb));
-
-	rb.push(s + 3, a, a + 1, r + 1);
-	rla->update();
-
-	RLA& rl = DQN(rb);
-	rl.update();
-
+	std::cout << max_itr << std::endl;
+	ReplayBuffer rb(buffer_size, last_n, s_n);
+	RLA& rla = DQN(rb, batch_size);
+	GameSession gs(s_n, a_n, rla, max_itr);
+	gs.start();
+	*/
 
 
 
@@ -101,4 +87,4 @@ int main() {
 	);
 	gs.start();
 	*/
-}
+//}
