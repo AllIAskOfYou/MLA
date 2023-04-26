@@ -5,11 +5,12 @@
 #include <stdint.h>
 
 typedef struct RBSample {
-	at::Tensor states;
-	at::Tensor aActions;
-	at::Tensor oActions;
-	at::Tensor rewards;
-	at::Tensor nStates;
+	at::Tensor states;		// state			(t)
+	at::Tensor aActions;	// agent action		(t)
+	at::Tensor oActions;	// oponent action	(t)
+	at::Tensor rewards;		// reward			(t)
+	at::Tensor nStates;		// next state		(t+1)
+	at::Tensor nOActions;	// next oponent a	(t+1)
 } RBSample;
 
 class ReplayBuffer {
@@ -22,6 +23,8 @@ public:
 	void push(at::Tensor s, at::Tensor aa, at::Tensor oa, at::Tensor r);
 
 	RBSample sample(int64_t batchSize);
+
+	RBSample get(int64_t index);
 
 private:
 	int64_t size;

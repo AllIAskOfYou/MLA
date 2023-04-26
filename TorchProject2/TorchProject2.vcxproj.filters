@@ -4,7 +4,7 @@
     <ClCompile Include="example-app.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="main.cpp">
+    <ClCompile Include="Main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="GameSession.cpp">
@@ -21,6 +21,9 @@
     </ClCompile>
     <ClCompile Include="PipeServer.cpp">
       <Filter>Source Files\ipc</Filter>
+    </ClCompile>
+    <ClCompile Include="dqn_main.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

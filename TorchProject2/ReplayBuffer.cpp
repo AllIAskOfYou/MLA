@@ -6,7 +6,7 @@ ReplayBuffer::ReplayBuffer(int64_t size, int64_t last_n, int64_t s_n ) :
 	states = DTensor({ size + 1, last_n, s_n }, at::TensorOptions().dtype(c10::ScalarType::Float));
 	aActions = DTensor({ size + 1, last_n }, at::TensorOptions().dtype(c10::ScalarType::Long));
 	oActions = DTensor({ size + 1, last_n }, at::TensorOptions().dtype(c10::ScalarType::Long));
-	rewards = DTensor({ size + 1, last_n }, at::TensorOptions().dtype(c10::ScalarType::Float));
+	rewards = DTensor({ size + 1, 1 }, at::TensorOptions().dtype(c10::ScalarType::Float));
 	prob = at::full({ size }, 1.0 / size, at::TensorOptions().dtype(c10::ScalarType::Float));
 }
 
@@ -26,9 +26,20 @@ RBSample ReplayBuffer::sample(int64_t batchSize) {
 	RBSample smpl;
 	smpl.states = states.index(idx - 1);
 	smpl.aActions = aActions.index(idx);
-	smpl.oActions = oActions.index(idx);
-	smpl.rewards = rewards.index(idx);
+	smpl.oActions = oActions.index(idx - 1);
+	smpl.rewards = rewards.index(idx).flatten();
 	smpl.nStates = states.index(idx);
+	smpl.nOActions = oActions.index(idx);
 
+	return smpl;
+}
+
+// only sets state and oaction for now !!
+RBSample ReplayBuffer::get(int64_t index) {
+	at::Tensor idx = at::tensor({index});
+	RBSample smpl;
+	smpl.states = states.index(idx);
+	smpl.oActions = oActions.index(idx);
+	
 	return smpl;
 }

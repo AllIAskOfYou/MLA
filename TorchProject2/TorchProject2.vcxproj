@@ -187,10 +187,11 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DQN.cpp" />
+    <ClCompile Include="dqn_main.cpp" />
     <ClCompile Include="DTensor.cpp" />
     <ClCompile Include="example-app.cpp" />
     <ClCompile Include="GameSession.cpp" />
-    <ClCompile Include="main.cpp" />
+    <ClCompile Include="Main.cpp" />
     <ClCompile Include="PipeServer.cpp" />
     <ClCompile Include="ReplayBuffer.cpp" />
   </ItemGroup>
