@@ -2,39 +2,9 @@
 #include <iostream>
 #include <chrono>
 #include "DQN.h"
+#include "models.h"
 
-class QNet : public torch::nn::Module {
-public:
-	QNet(int64_t s_n, int64_t a_n, int64_t last_n) :
-		lin(torch::nn::Linear(s_n * last_n, 8)),
-		emb(torch::nn::Embedding(a_n, 8)),
-		lin_emb(torch::nn::Linear(last_n * 8, 8)),
-		out(torch::nn::Linear(16, a_n))
-	{
-		register_module("lin", lin);
-		register_module("emb", emb);
-		register_module("lin_emb", lin_emb);
-	}
 
-	at::Tensor forward(at::Tensor s, at::Tensor oa) {
-		//s = s.transpose(1, 2);
-		/*
-		std::cout << s.sizes() << std::endl;
-		std::cout << oa.sizes() << std::endl;
-		std::cout << s.flatten(1).sizes() << std::endl;
-		std::cout << oa.flatten(1).sizes() << std::endl;
-		std::cout << lin(s.flatten(1)) << std::endl;
-		std::cout << emb(oa.flatten(1)) << std::endl;
-		*/
-		return out(flatten(torch::cat({ lin(s.flatten(1)), lin_emb(emb(oa.flatten(1)).flatten(1))}, -1)));
-	}
-
-	torch::nn::Linear lin;
-	torch::nn::Embedding emb;
-	torch::nn::Linear lin_emb;
-	torch::nn::Linear out;
-	torch::nn::Flatten flatten;
-};
 
 int main() {
 	int64_t s_n = 5;
@@ -54,8 +24,8 @@ int main() {
 	rb.push(s, aa, oa, r+2);
 	rb.push(s, aa, oa, r+3);
 
-	torch::nn::AnyModule qNet(QNet(s_n, a_n, last_n));
-	torch::nn::AnyModule qNetTarget(QNet(s_n, a_n, last_n));
+	torch::nn::AnyModule qNet(md::QNetState(s_n, a_n, last_n));
+	torch::nn::AnyModule qNetTarget(md::QNetState(s_n, a_n, last_n));
 
 	torch::optim::Adam opt(qNet.ptr()->parameters(), torch::optim::AdamOptions(0.001));
 
@@ -77,14 +47,29 @@ int main() {
 	auto cat = torch::cat({lin, emb}, -1);
 	std::cout << cat << std::endl;
 	*/
-	std::cout << qNetTarget.forward(rs.states, rs.oActions) << std::endl;
+	std::cout << qNetTarget.forward(rs.states, rs.pAActions, rs.pOActions) << std::endl;
 
 	std::cout << "Yay" << std::endl;
 
-	dqn.update();
+	at::Tensor nAction;
+	nAction = dqn.nextAction();
+
+	for (int i = 0; i < 100; i++) {
+		dqn.update();
+	}
+	nAction = dqn.nextAction();
+
+	for (int i = 0; i < 100; i++) {
+		dqn.update();
+	}
+	nAction = dqn.nextAction();
+
+	for (int i = 0; i < 100; i++) {
+		dqn.update();
+	}
+	nAction = dqn.nextAction();
 
 	std::cout << "Update dela" << std::endl;
 
-	at::Tensor nAction = dqn.nextAction();
 	std::cout << "Next action: \n" << nAction << std::endl;
 }

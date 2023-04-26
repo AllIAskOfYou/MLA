@@ -46,14 +46,16 @@ void DQN::update() {
 		// calculate Q'(s', A')
 		outQT = qNetTarget.forward(
 			rs.nStates,
-			rs.nOActions
+			rs.aActions,
+			rs.oActions
 		);
 
 		// claculate Q(s', A')
 		qNet.ptr()->eval();
 		outQ = qNet.forward(
 			rs.nStates,
-			rs.nOActions
+			rs.aActions,
+			rs.oActions
 		);
 		qNet.ptr()->train();
 
@@ -68,7 +70,8 @@ void DQN::update() {
 	// calculate Q(s, A)
 	out = qNet.forward(
 		rs.states,
-		rs.oActions
+		rs.pAActions,
+		rs.pOActions
 	);
 
 	// calculate Q(s, a)
@@ -92,8 +95,10 @@ at::Tensor DQN::nextAction() {
 	RBSample rs = rb.get(-1);
 	at::Tensor out =  qNet.forward(
 		rs.states,
-		rs.oActions
+		rs.pAActions,
+		rs.pOActions
 	);
+	std::cout << out << std::endl;
 	at::Tensor nAction = out.argmax();
 	return nAction;
 }

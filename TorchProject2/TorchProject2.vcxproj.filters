@@ -39,6 +39,9 @@
     <Filter Include="Source Files\ipc">
       <UniqueIdentifier>{e8771bcb-60ef-4db0-9fda-4ee0338b058c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\models">
+      <UniqueIdentifier>{688f629b-010f-4502-97c0-b5b143c439d2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameSession.h">
@@ -61,6 +64,15 @@
     </ClInclude>
     <ClInclude Include="tensoroptions.h">
       <Filter>Source Files\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="QNetSimpl.h">
+      <Filter>Source Files\models</Filter>
+    </ClInclude>
+    <ClInclude Include="models.h">
+      <Filter>Source Files\models</Filter>
+    </ClInclude>
+    <ClInclude Include="QNetState.h">
+      <Filter>Source Files\models</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

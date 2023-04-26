@@ -180,7 +180,10 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <ClInclude Include="DQN.h" />
     <ClInclude Include="DTensor.h" />
     <ClInclude Include="GameSession.h" />
+    <ClInclude Include="models.h" />
+    <ClInclude Include="QNetSimpl.h" />
     <ClInclude Include="PipeServer.h" />
+    <ClInclude Include="QNetState.h" />
     <ClInclude Include="ReplayBuffer.h" />
     <ClInclude Include="RLA.h" />
     <ClInclude Include="tensoroptions.h" />

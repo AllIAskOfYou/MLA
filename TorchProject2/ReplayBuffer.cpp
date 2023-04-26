@@ -26,20 +26,22 @@ RBSample ReplayBuffer::sample(int64_t batchSize) {
 	RBSample smpl;
 	smpl.states = states.index(idx - 1);
 	smpl.aActions = aActions.index(idx);
-	smpl.oActions = oActions.index(idx - 1);
+	smpl.oActions = oActions.index(idx);
 	smpl.rewards = rewards.index(idx).flatten();
 	smpl.nStates = states.index(idx);
-	smpl.nOActions = oActions.index(idx);
+	smpl.pAActions = states.index(idx - 1);
+	smpl.pOActions = oActions.index(idx - 1);
 
 	return smpl;
 }
 
-// only sets state and oaction for now !!
+// only sets state, aaction and oaction for now !!
 RBSample ReplayBuffer::get(int64_t index) {
 	at::Tensor idx = at::tensor({index});
 	RBSample smpl;
 	smpl.states = states.index(idx);
-	smpl.oActions = oActions.index(idx);
+	smpl.pAActions = states.index(idx);
+	smpl.pOActions = oActions.index(idx);
 	
 	return smpl;
 }

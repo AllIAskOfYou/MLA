@@ -4,13 +4,18 @@
 #include "ATen/ATen.h"
 #include <stdint.h>
 
+// Context:
+//
+// { s(t), aa(t), oa(t) } -> { s(t+1), r(t) }
+// Q( s(t), aa(t-1), oa(t-1) ) -> Q_A
 typedef struct RBSample {
 	at::Tensor states;		// state			(t)
 	at::Tensor aActions;	// agent action		(t)
 	at::Tensor oActions;	// oponent action	(t)
 	at::Tensor rewards;		// reward			(t)
 	at::Tensor nStates;		// next state		(t+1)
-	at::Tensor nOActions;	// next oponent a	(t+1)
+	at::Tensor pAActions;	// prev agent a		(t-1)
+	at::Tensor pOActions;	// prev oponent a	(t-1)
 } RBSample;
 
 class ReplayBuffer {
