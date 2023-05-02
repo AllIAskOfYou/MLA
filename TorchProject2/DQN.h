@@ -1,7 +1,8 @@
 #pragma once
 
-#include "RLA.h"
 #include <torch/torch.h>
+#include "RLA.h"
+#include "XPA.h"
 
 class DQN : public RLA {
 public:
@@ -11,6 +12,7 @@ public:
 		torch::nn::AnyModule qNet,
 		torch::nn::AnyModule qNetTarget,
 		torch::optim::Optimizer& opt,
+		XPA& xpa,
 		float gamma,
 		float delta
 	);
@@ -28,6 +30,7 @@ public:
 private:
 	torch::nn::AnyModule qNet, qNetTarget;
 	torch::optim::Optimizer& opt;
+	XPA& xpa;
 	float gamma, delta;
 };
 

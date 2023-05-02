@@ -1,4 +1,5 @@
 #include "ReplayBuffer.h"
+#include <iostream>
 
 ReplayBuffer::ReplayBuffer(int64_t size, int64_t last_n, int64_t s_n ) :
 	size(size)
@@ -29,7 +30,7 @@ RBSample ReplayBuffer::sample(int64_t batchSize) {
 	smpl.oActions = oActions.index(idx);
 	smpl.rewards = rewards.index(idx).flatten();
 	smpl.nStates = states.index(idx);
-	smpl.pAActions = states.index(idx - 1);
+	smpl.pAActions = aActions.index(idx - 1);
 	smpl.pOActions = oActions.index(idx - 1);
 
 	return smpl;
@@ -40,7 +41,7 @@ RBSample ReplayBuffer::get(int64_t index) {
 	at::Tensor idx = at::tensor({index});
 	RBSample smpl;
 	smpl.states = states.index(idx);
-	smpl.pAActions = states.index(idx);
+	smpl.pAActions = aActions.index(idx);
 	smpl.pOActions = oActions.index(idx);
 	
 	return smpl;

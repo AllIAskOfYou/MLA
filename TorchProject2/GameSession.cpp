@@ -36,44 +36,20 @@ void GameSession::start() {
 			rla.push(s, aa, oa, r);
 
 			// take one update step on the policy / model
-			rla.update();
-
+			for (int i = 0; i < 1; i++) {
+				rla.update();
+			}
+			
 			// if in terminal state break
 			if ((int)ts == 1) break;
 
 			// get next action based on current policy and data
 			aa = rla.nextAction();
-
+			aa = aa.to(at::kFloat);
+			
 			// send new action to the game
 			ps.sendData(aa.data_ptr<float>(), aa.numel());
 		}
 		std::cout << "< Session ended with " << itr << " iterations >" << std::endl;
 	}
 }
-
-// update oa model on: s_n, aa_n, oa_n -> oa_(n+1)
-/*
-void GameSession::updateOaModel() {
-	oaModelOptimizer->zero_grad();
-	torch::Tensor output = oaModel.forward(
-		states.index({ Slice(0, -1) }),
-		aActions.index({ Slice(0, -1) }),
-		oActions.index({ Slice(0, -1) })
-	);
-	torch::Tensor loss = torch::nn::CrossEntropyLoss()(
-		output,
-		oActions.index({Slice(1), Slice(), -1})
-		);
-	loss.backward();
-	oaModelOptimizer->step();
-}
-
-torch::Tensor GameSession::getNextOa() {
-	torch::NoGradGuard no_grad;
-	return oaModel.forward(
-		states.index({ Slice(-1) }),
-		aActions.index({ Slice(-1) }),
-		oActions.index({ Slice(-1) })
-	);
-}
-*/

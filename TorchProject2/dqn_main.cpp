@@ -3,10 +3,11 @@
 #include <chrono>
 #include "DQN.h"
 #include "models.h"
+#include "EpsilonGreedy.h"
 
 
 
-int main() {
+int mainImpl() {
 	int64_t s_n = 5;
 	int64_t a_n = 3;
 	int64_t last_n = 2;
@@ -31,7 +32,9 @@ int main() {
 
 	std::cout << "Yay" << std::endl;
 
-	DQN dqn(rb, batch_size, qNet, qNetTarget, opt, 0.9, 0.99);
+	EpsilonGreedy xpa(1, 0.1, 0.98);
+
+	DQN dqn(rb, batch_size, qNet, qNetTarget, opt, xpa, 0.9, 0.99);
 	std::cout << "Yay" << std::endl;
 	
 	auto rs = dqn.get_rb().sample(buffer_size);

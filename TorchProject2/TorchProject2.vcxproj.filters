@@ -25,6 +25,15 @@
     <ClCompile Include="dqn_main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="main_caller.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="main_rps.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="EpsilonGreedy.cpp">
+      <Filter>Source Files\algorithms\exploration</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Source Files">
@@ -41,6 +50,9 @@
     </Filter>
     <Filter Include="Source Files\models">
       <UniqueIdentifier>{688f629b-010f-4502-97c0-b5b143c439d2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\algorithms\exploration">
+      <UniqueIdentifier>{56aae5a1-be8a-46ab-8ad2-60bd3da6940f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -72,6 +84,30 @@
       <Filter>Source Files\models</Filter>
     </ClInclude>
     <ClInclude Include="QNetState.h">
+      <Filter>Source Files\models</Filter>
+    </ClInclude>
+    <ClInclude Include="dqn_main.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="main_rps.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="QNetBasic.h">
+      <Filter>Source Files\models</Filter>
+    </ClInclude>
+    <ClInclude Include="EpsilonGreedy.h">
+      <Filter>Source Files\algorithms\exploration</Filter>
+    </ClInclude>
+    <ClInclude Include="XPA.h">
+      <Filter>Source Files\algorithms\exploration</Filter>
+    </ClInclude>
+    <ClInclude Include="QNetConv.h">
+      <Filter>Source Files\models</Filter>
+    </ClInclude>
+    <ClInclude Include="ConvHead.h">
+      <Filter>Source Files\models</Filter>
+    </ClInclude>
+    <ClInclude Include="ConvBlock.h">
       <Filter>Source Files\models</Filter>
     </ClInclude>
   </ItemGroup>

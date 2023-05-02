@@ -7,7 +7,7 @@ namespace md {
 	class QNetState : public torch::nn::Module {
 	public:
 		QNetState(int64_t s_n, int64_t a_n, int64_t last_n) :
-			lin(torch::nn::Linear(s_n* last_n, 8)),
+			lin(torch::nn::Linear(s_n * last_n, 8)),
 			lin2(torch::nn::Linear(8, a_n))
 		{
 			register_module("lin", lin);

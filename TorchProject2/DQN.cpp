@@ -2,11 +2,12 @@
 #include <iostream>
 
 DQN::DQN(
-	ReplayBuffer& rb, 
+	ReplayBuffer& rb,
 	int64_t batch_size,
 	torch::nn::AnyModule qNet,
 	torch::nn::AnyModule qNetTarget,
 	torch::optim::Optimizer& opt,
+	XPA& xpa,
 	float gamma,
 	float delta
 ) :
@@ -14,6 +15,7 @@ DQN::DQN(
 	qNet(qNet),
 	qNetTarget(qNetTarget),
 	opt(opt),
+	xpa(xpa),
 	gamma(gamma),
 	delta(delta)
 {
@@ -91,6 +93,7 @@ void DQN::update() {
 	}
 }
 
+// calculates new action given the curent policy
 at::Tensor DQN::nextAction() {
 	RBSample rs = rb.get(-1);
 	at::Tensor out =  qNet.forward(
@@ -99,6 +102,11 @@ at::Tensor DQN::nextAction() {
 		rs.pOActions
 	);
 	std::cout << out << std::endl;
-	at::Tensor nAction = out.argmax();
+
+	at::Tensor nAction = xpa.nextAction(out);
+
+	// update exploration method
+	xpa.update();
+
 	return nAction;
 }
