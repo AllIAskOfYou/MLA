@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <conio.h>
 #include <tchar.h>
+#include <string>
 //#include <ATen/ATen.h>
 
 #define BUFSIZE 4096
@@ -12,7 +13,7 @@ class PipeServer {
 	public:
 		PipeServer();
 
-		bool connect();
+		bool connect(std::string);
 
 		bool sendData(float* startPtr, int size);
 
@@ -25,5 +26,6 @@ class PipeServer {
 		BOOL   mConnected = FALSE;
 		BOOL   mSuccess = FALSE;
 		DWORD  mRead, mToWrite, mWritten, mMode;
-		LPTSTR mPipename = TEXT("\\\\.\\pipe\\Foo");
+		std::string mBasePath = "\\\\.\\pipe";
+		LPTSTR mPipename = new TCHAR[256];
 };

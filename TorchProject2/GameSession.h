@@ -2,6 +2,7 @@
 
 #include <ATen/ATen.h>
 #include <iostream>
+#include <thread>
 #include "PipeServer.h"
 #include "RLA.h"
 
@@ -21,6 +22,11 @@ public:
 	);
 
 	void start();
+
+private:
+	void update();
+	void nextAction();
+	void nextOAction();
 
 private:
 	// states dimension or number of features
@@ -43,6 +49,8 @@ private:
 	// number of units read
 	int readS, readA, readR, readTS;
 
-	// pipe server for comunication with a game process
-	PipeServer ps;
+	// pipe server routes for comunication with a game process
+	std::string path_update		= "\\update";
+	std::string path_nextAction	= "\\nextAction";
+	std::string path_nextOAction;
 };

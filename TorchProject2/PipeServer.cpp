@@ -2,7 +2,9 @@
 
 PipeServer::PipeServer() {}
 
-bool PipeServer::connect() {
+bool PipeServer::connect(std::string pipename) {
+    std::string pipePath = mBasePath + pipename;
+    _tcscpy_s(mPipename, pipePath.length() + 1, pipePath.c_str());
 	_tprintf(TEXT("\nPipe Server: Main thread awaiting client connection on %s\n"), mPipename);
 	mPipe = CreateNamedPipe(
 		mPipename,				  // pipe name 

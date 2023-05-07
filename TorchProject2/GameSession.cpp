@@ -15,14 +15,25 @@ GameSession::GameSession(
 	oa = at::zeros({ 1 });
 	r = at::zeros({ 1 });
 	aa = at::zeros({ 1 });
+
+
 };
 
 void GameSession::start() {
-	if (ps.connect()) {
-		std::cout << "Yeay" << std::endl;
+	std::thread t1(&GameSession::update, this);
+	std::thread t2(&GameSession::nextAction, this);
+	std::thread t3(&GameSession::nextOAction, this);
 
-		size_t itr = 0;
-		for (; itr < max_itr; itr++) {
+	t1.join();
+	t2.join();
+	t3.join();
+}
+
+void GameSession::update() {
+	PipeServer ps;
+	if (ps.connect(path_update)) {
+		std::cout << "Connected to \\update." << std::endl;
+		while (true) {
 			// get new state and oponent action
 			readS = ps.recieveData(s.data_ptr<float>(), s_n);
 			readA = ps.recieveData(oa.data_ptr<float>(), 1);
@@ -39,17 +50,24 @@ void GameSession::start() {
 			for (int i = 0; i < 1; i++) {
 				rla.update();
 			}
-			
-			// if in terminal state break
-			if ((int)ts == 1) break;
+		}
+	}
+}
 
+void GameSession::nextAction() {
+	PipeServer ps;
+	if (ps.connect(path_nextAction)) {
+		std::cout << "Connected to \\update." << std::endl;
+		while (true) {
 			// get next action based on current policy and data
 			aa = rla.nextAction();
 			aa = aa.to(at::kFloat);
-			
+
 			// send new action to the game
 			ps.sendData(aa.data_ptr<float>(), aa.numel());
 		}
-		std::cout << "< Session ended with " << itr << " iterations >" << std::endl;
 	}
+}
+
+void GameSession::nextOAction() {
 }
