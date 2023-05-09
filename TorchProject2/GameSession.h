@@ -2,7 +2,6 @@
 
 #include <ATen/ATen.h>
 #include <iostream>
-#include <thread>
 #include "PipeServer.h"
 #include "RLA.h"
 
@@ -47,10 +46,8 @@ private:
 	at::Tensor next_oa;
 
 	// number of units read
-	int readS, readA, readR, readTS;
+	int readReq, readS, readA, readR, readTS;
 
 	// pipe server routes for comunication with a game process
-	std::string path_update		= "\\update";
-	std::string path_nextAction	= "\\nextAction";
-	std::string path_nextOAction;
+	PipeServer ps;
 };
