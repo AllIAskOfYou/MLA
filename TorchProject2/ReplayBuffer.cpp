@@ -30,9 +30,9 @@ RBSample ReplayBuffer::sample(int64_t batchSize) {
 	RBSample smpl;
 
 	smpl.states = get(idx - 1);
-	smpl.nStates = get(idx);
-
+	smpl.aActions = aActions.index(idx).index({at::indexing::Slice(), -1});
 	smpl.rewards = rewards.index(idx).flatten();
+	smpl.nStates = get(idx);
 
 	return smpl;
 }

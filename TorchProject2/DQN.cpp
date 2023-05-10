@@ -51,7 +51,6 @@ void DQN::update() {
 		// claculate Q(s', A')
 		qNet.ptr()->eval();
 		outQ = qNet.forward(rs.nStates);
-		qNet.ptr()->train();
 
 		// calculate target Q(s, a)
 		targets = rs.rewards +
@@ -62,11 +61,11 @@ void DQN::update() {
 		targets = targets.detach();
 	}
 	// calculate Q(s, A)
+	qNet.ptr()->train();
 	out = qNet.forward(rs.states);
 
 	// calculate Q(s, a)
-	aActionsLast = rs.nStates.aActions.index({ at::indexing::Slice(), -1 });
-	out = out.index({ at::arange(batch_size), aActionsLast });
+	out = out.index({ at::arange(batch_size), rs.aActions });
 
 	loss = torch::nn::MSELoss()(out, targets);//(outQ - targets).square().mean();
 	loss.backward();
@@ -84,6 +83,7 @@ void DQN::update() {
 // calculates new action given the curent policy
 at::Tensor DQN::nextAction() {
 	State state = rb.get(-1);
+	qNet.ptr()->eval();
 	at::Tensor out =  qNet.forward(state);
 	std::cout << out << std::endl;
 

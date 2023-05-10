@@ -54,6 +54,9 @@
     <Filter Include="Source Files\algorithms\exploration">
       <UniqueIdentifier>{56aae5a1-be8a-46ab-8ad2-60bd3da6940f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\structs">
+      <UniqueIdentifier>{32f396ba-e557-4c17-9e21-cf0225fa9564}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameSession.h">
@@ -110,8 +113,11 @@
     <ClInclude Include="ConvBlock.h">
       <Filter>Source Files\models</Filter>
     </ClInclude>
+    <ClInclude Include="State.h">
+      <Filter>Source Files\structs</Filter>
+    </ClInclude>
     <ClInclude Include="RBSample.h">
-      <Filter>Source Files\utils</Filter>
+      <Filter>Source Files\structs</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

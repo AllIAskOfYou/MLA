@@ -1,9 +1,9 @@
 #pragma once
 
 #include <torch/torch.h>
-#include "ConvHead.h"
 #include <chrono>
-#include "RBSample.h"
+#include "ConvHead.h"
+#include "State.h"
 
 namespace md {
 
@@ -21,10 +21,11 @@ namespace md {
 			std::vector<bool> pools,
 			std::vector<int64_t> units
 		) :
+			bn_es(torch::nn::BatchNorm1d(es_n)),
+			bn_as(torch::nn::BatchNorm1d(as_n)),
 			lin_es(torch::nn::Linear(es_n, es_emb)),
 			lin_as(torch::nn::Linear(as_n, as_emb)),
 			emb(torch::nn::Embedding(a_n, a_emb)),
-			bn(torch::nn::BatchNorm1d(es_emb)),
 			conv_es(ConvHead(es_emb, dims, pools)),
 			conv_as(ConvHead(as_emb, dims, pools)),
 			conv_a(ConvHead(a_emb, dims, pools)),
@@ -43,6 +44,8 @@ namespace md {
 				out->push_back(torch::nn::Linear(units[i-1], units[i]));
 			}
 
+			register_module("bn_es", bn_es);
+			register_module("bn_as", bn_as);
 			register_module("lin_es", lin_es);
 			register_module("lin_as", lin_as);
 			register_module("emb", emb);
@@ -65,7 +68,16 @@ namespace md {
 			auto t0 = std::chrono::high_resolution_clock::now();
 
 			// normalize states representation per feature
-			es = bn(es);
+
+			es = at::transpose(es, 1, 2);
+			as = at::transpose(as, 1, 2);
+			os = at::transpose(os, 1, 2);
+			es = bn_es(es);
+			as = bn_as(as);
+			os = bn_as(os);
+			es = at::transpose(es, 1, 2);
+			as = at::transpose(as, 1, 2);
+			os = at::transpose(os, 1, 2);
 
 			// linearly transform ( B, L, s_n) -> ( B, L, s_emb)
 			es = lin_es(es);
@@ -92,7 +104,6 @@ namespace md {
 			oa = conv_a(oa);
 			auto t2 = std::chrono::high_resolution_clock::now();
 
-
 			es = es.flatten(1);
 			as = as.flatten(1);
 			os = os.flatten(1);
@@ -110,10 +121,11 @@ namespace md {
 			return x;
 		}
 
+		torch::nn::BatchNorm1d bn_es;
+		torch::nn::BatchNorm1d bn_as;
 		torch::nn::Linear lin_es;
 		torch::nn::Linear lin_as;
 		torch::nn::Embedding emb;
-		torch::nn::BatchNorm1d bn;
 		ConvHead conv_es;
 		ConvHead conv_as;
 		ConvHead conv_a;
