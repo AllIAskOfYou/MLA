@@ -14,7 +14,8 @@
 class GameSession {
 public:
 	GameSession(
-		int64_t s_n,
+		int64_t es_n,
+		int64_t as_n,
 		int64_t a_n,
 		RLA& rla,
 		size_t max_itr
@@ -29,7 +30,8 @@ private:
 
 private:
 	// states dimension or number of features
-	int64_t s_n;
+	int64_t es_n;
+	int64_t as_n;
 	// number of actions
 	int64_t a_n;
 	// reinforcement learning algorithm
@@ -38,7 +40,9 @@ private:
 	size_t max_itr;
 
 	// buffers for single data
-	at::Tensor s;
+	at::Tensor es;
+	at::Tensor as;
+	at::Tensor os;
 	at::Tensor aa;
 	at::Tensor oa;
 	at::Tensor r;
@@ -46,7 +50,7 @@ private:
 	at::Tensor next_oa;
 
 	// number of units read
-	int readReq, readS, readA, readR, readTS;
+	int readReq, readES, readAS, readOS, readA, readR, readTS;
 
 	// pipe server routes for comunication with a game process
 	PipeServer ps;

@@ -1,8 +1,8 @@
 #pragma once
 
 #include <ATen/ATen.h>
-#include "ReplayBuffer.h"
 #include <stdint.h>
+#include "ReplayBuffer.h"
 
 class RLA {
 protected:
@@ -13,13 +13,15 @@ protected:
 
 public:
 	void push(
-		at::Tensor s,
+		at::Tensor es,
+		at::Tensor as,
+		at::Tensor os,
 		at::Tensor aa,
 		at::Tensor oa,
 		at::Tensor r
 	)
 	{
-		rb.push(s, aa, oa, r);
+		rb.push(es, as, os, aa, oa, r);
 	}
 
 public:

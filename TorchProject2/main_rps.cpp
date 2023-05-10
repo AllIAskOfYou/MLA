@@ -5,7 +5,8 @@
 #include "EpsilonGreedy.h"
 
 int main_rps() {
-	int64_t s_n = 1;
+	int64_t es_n = 1;
+	int64_t as_n = 1;
 	int64_t a_n = 4;
 	int64_t last_n = 32;
 	int64_t batch_size = 32;
@@ -17,10 +18,14 @@ int main_rps() {
 	std::vector<int64_t> units = { 8, a_n };
 
 
-	ReplayBuffer rb(buffer_size, last_n, s_n);
+	ReplayBuffer rb(buffer_size, last_n, es_n, as_n);
 
-	torch::nn::AnyModule qNet(md::QNetConv(s_n, a_n, last_n, 8, 8, dims, pools, units));
-	torch::nn::AnyModule qNetTarget(md::QNetConv(s_n, a_n, last_n, 8, 8, dims, pools, units));
+	torch::nn::AnyModule qNet(
+		md::QNetConv(es_n, as_n, a_n, last_n, 8, 8, 8, dims, pools, units)
+	);
+	torch::nn::AnyModule qNetTarget(
+		md::QNetConv(es_n, as_n, a_n, last_n, 8, 8, 8, dims, pools, units)
+	);
 
 	//torch::nn::AnyModule qNet(md::QNetState(s_n, a_n, last_n));
 	//torch::nn::AnyModule qNetTarget(md::QNetState(s_n, a_n, last_n));
@@ -31,6 +36,6 @@ int main_rps() {
 
 	DQN dqn(rb, batch_size, qNet, qNetTarget, opt, xpa, 0.5, 0.99);
 
-	GameSession gs(s_n, a_n, dqn, max_iter);
+	GameSession gs(es_n, as_n, a_n, dqn, max_iter);
 	gs.start();
 }

@@ -46,19 +46,11 @@ void DQN::update() {
 		at::NoGradGuard no_grad;
 
 		// calculate Q'(s', A')
-		outQT = qNetTarget.forward(
-			rs.nStates,
-			rs.aActions,
-			rs.oActions
-		);
+		outQT = qNetTarget.forward(rs.nStates);
 
 		// claculate Q(s', A')
 		qNet.ptr()->eval();
-		outQ = qNet.forward(
-			rs.nStates,
-			rs.aActions,
-			rs.oActions
-		);
+		outQ = qNet.forward(rs.nStates);
 		qNet.ptr()->train();
 
 		// calculate target Q(s, a)
@@ -70,14 +62,10 @@ void DQN::update() {
 		targets = targets.detach();
 	}
 	// calculate Q(s, A)
-	out = qNet.forward(
-		rs.states,
-		rs.pAActions,
-		rs.pOActions
-	);
+	out = qNet.forward(rs.states);
 
 	// calculate Q(s, a)
-	aActionsLast = rs.aActions.index({ at::indexing::Slice(), -1 });
+	aActionsLast = rs.nStates.aActions.index({ at::indexing::Slice(), -1 });
 	out = out.index({ at::arange(batch_size), aActionsLast });
 
 	loss = torch::nn::MSELoss()(out, targets);//(outQ - targets).square().mean();
@@ -95,12 +83,8 @@ void DQN::update() {
 
 // calculates new action given the curent policy
 at::Tensor DQN::nextAction() {
-	RBSample rs = rb.get(-1);
-	at::Tensor out =  qNet.forward(
-		rs.states,
-		rs.pAActions,
-		rs.pOActions
-	);
+	State state = rb.get(-1);
+	at::Tensor out =  qNet.forward(state);
 	std::cout << out << std::endl;
 
 	at::Tensor nAction = xpa.nextAction(out);

@@ -8,9 +8,10 @@
 
 
 int mainImpl() {
-	int64_t s_n = 5;
+	int64_t es_n = 5;
+	int64_t as_n = 5;
 	int64_t a_n = 3;
-	int64_t last_n = 2;
+	int64_t last_n = 8;
 	int64_t batch_size = 4;
 	int64_t buffer_size = 8;
 
@@ -19,14 +20,18 @@ int mainImpl() {
 	at::Tensor oa = at::tensor({ 2 }, torch::dtype(torch::kInt64));
 	at::Tensor r = at::tensor({ 0 }, torch::dtype(torch::kFloat32));
 
-	ReplayBuffer rb(buffer_size, last_n, s_n);
-	rb.push(s, aa, oa, r);
-	rb.push(s, aa, oa, r+1);
-	rb.push(s, aa, oa, r+2);
-	rb.push(s, aa, oa, r+3);
+	ReplayBuffer rb(buffer_size, last_n, es_n, as_n);
+	rb.push(s, s, s, aa, oa, r);
+	rb.push(s, s, s, aa, oa, r+1);
+	rb.push(s, s, s, aa, oa, r+2);
+	rb.push(s, s, s, aa, oa, r+3);
 
-	torch::nn::AnyModule qNet(md::QNetState(s_n, a_n, last_n));
-	torch::nn::AnyModule qNetTarget(md::QNetState(s_n, a_n, last_n));
+	std::vector<int64_t> dims = { 8, 8 };
+	std::vector<bool> pools = { true, false };
+	std::vector<int64_t> units = { 8, a_n };
+
+	torch::nn::AnyModule qNet(md::QNetConv(es_n, as_n, a_n, last_n, 4, 4, 4, dims, pools, units));
+	torch::nn::AnyModule qNetTarget(md::QNetConv(es_n, as_n, a_n, last_n, 4, 4, 4, dims, pools, units));
 
 	torch::optim::Adam opt(qNet.ptr()->parameters(), torch::optim::AdamOptions(0.001));
 
@@ -50,7 +55,7 @@ int mainImpl() {
 	auto cat = torch::cat({lin, emb}, -1);
 	std::cout << cat << std::endl;
 	*/
-	std::cout << qNetTarget.forward(rs.states, rs.pAActions, rs.pOActions) << std::endl;
+	std::cout << qNetTarget.forward(rs.states) << std::endl;
 
 	std::cout << "Yay" << std::endl;
 

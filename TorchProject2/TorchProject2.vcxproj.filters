@@ -110,5 +110,8 @@
     <ClInclude Include="ConvBlock.h">
       <Filter>Source Files\models</Filter>
     </ClInclude>
+    <ClInclude Include="RBSample.h">
+      <Filter>Source Files\utils</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
