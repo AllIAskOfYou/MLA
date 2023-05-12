@@ -23,9 +23,15 @@ public:
 	// returns the next action to be preformed by the agent
 	at::Tensor nextAction();
 
+	// returns the next action to be preformed by the self oponent
+	at::Tensor selfPlay();
+
 	ReplayBuffer& get_rb() {
 		return rb;
 	}
+
+private:
+	void update_params();
 
 private:
 	torch::nn::AnyModule qNet, qNetTarget;

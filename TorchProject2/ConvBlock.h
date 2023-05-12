@@ -2,6 +2,8 @@
 
 #include <torch/torch.h>
 
+namespace md {
+
 class ConvBlockImpl: public torch::nn::Module {
 public:
 	ConvBlockImpl(int64_t in_dim, int64_t out_dim, int64_t do_max_pool) :
@@ -37,3 +39,5 @@ public:
 	bool do_max_pool = false;
 };
 TORCH_MODULE(ConvBlock);
+
+}

@@ -3,6 +3,8 @@
 #include <torch/torch.h>
 #include "ConvBlock.h"
 
+namespace md {
+
 class ConvHeadImpl : public torch::nn::Module
 {
 public:
@@ -23,3 +25,5 @@ public:
 	torch::nn::Sequential layers;
 };
 TORCH_MODULE(ConvHead);
+
+}

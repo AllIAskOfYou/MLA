@@ -26,7 +26,7 @@ public:
 private:
 	void update();
 	void nextAction();
-	void nextOAction();
+	void selfPlay();
 
 private:
 	// states dimension or number of features

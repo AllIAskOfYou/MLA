@@ -27,6 +27,7 @@ public:
 public:
 	virtual void update() = 0;
 	virtual at::Tensor nextAction() = 0;
+	virtual at::Tensor selfPlay() = 0;
 
 protected:
 	ReplayBuffer& rb;

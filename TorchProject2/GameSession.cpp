@@ -16,9 +16,9 @@ GameSession::GameSession(
 	es = at::zeros({ es_n });
 	as = at::zeros({ as_n });
 	os = at::zeros({ as_n });
+	aa = at::zeros({ 1 });
 	oa = at::zeros({ 1 });
 	r = at::zeros({ 1 });
-	aa = at::zeros({ 1 });
 };
 
 void GameSession::start() {
@@ -41,7 +41,7 @@ void GameSession::start() {
 				nextAction();
 				break;
 			case 3:
-				nextOAction();
+				selfPlay();
 				break;
 			}
 		}
@@ -78,5 +78,11 @@ void GameSession::nextAction() {
 	ps.sendData(aa.data_ptr<float>(), aa.numel());
 }
 
-void GameSession::nextOAction() {
+void GameSession::selfPlay() {
+	// get next self opponent action
+	oa = rla.selfPlay();
+	oa = oa.to(at::kFloat);
+
+	// send new action to the game
+	ps.sendData(oa.data_ptr<float>(), oa.numel());
 }
