@@ -112,7 +112,7 @@ namespace md {
 
 			at::Tensor x = torch::cat({ es, as, os, aa, oa }, -1);
 
-			std::cout << "X: \n" << x << std::endl;
+			//std::cout << "X: \n" << x << std::endl;
 			x = out->forward(x);
 			auto t3 = std::chrono::high_resolution_clock::now();
 

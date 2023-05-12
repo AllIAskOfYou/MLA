@@ -80,4 +80,5 @@ int mainImpl() {
 	std::cout << "Update dela" << std::endl;
 
 	std::cout << "Next action: \n" << nAction << std::endl;
+	return 0;
 }

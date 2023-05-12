@@ -81,18 +81,6 @@ void DQN::update() {
 	update_params();
 }
 
-void DQN::update_params() {
-	auto p = qNet.ptr()->parameters();
-	auto pT = qNetTarget.ptr()->parameters();
-	size_t p_n = pT.size();
-	for (size_t i = 0; i < p_n; i++) {
-		//std::cout << p[i] << "\n : \n" << pT[i] << std::endl;
-		pT[i].set_data(delta * pT[i] + (1 - delta) * p[i]);//.detach().clone();
-		//pT[i].copy_(delta * pT[i] + (1 - delta) * p[i]);
-		//pT[i].data().copy_(delta * pT[i].data() + (1 - delta) * p[i].data());
-	}
-}
-
 // calculates new action given the curent policy
 at::Tensor DQN::nextAction() {
 	State state = rb.get(-1);
@@ -122,4 +110,20 @@ at::Tensor DQN::selfPlay() {
 	at::Tensor nAction = xpa.nextAction(out);
 
 	return nAction;
+}
+
+void DQN::update_params() {
+	auto p = qNet.ptr()->parameters();
+	auto pT = qNetTarget.ptr()->parameters();
+	const size_t p_n = pT.size();
+	for (size_t i = 0; i < p_n; i++) {
+		pT[i].set_data(delta * pT[i] + (1 - delta) * p[i]);
+	}
+	auto b = qNet.ptr()->buffers();
+	auto bT = qNetTarget.ptr()->buffers();
+	const size_t b_n = bT.size();
+	for (size_t i = 0; i < b_n; i++) {
+		bT[i].set_data(delta * bT[i] + (1 - delta) * b[i]);
+	}
+
 }
