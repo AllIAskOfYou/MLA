@@ -9,7 +9,7 @@ int main_rpg() {
 	int64_t es_n = 1;
 	int64_t as_n = 1;
 	int64_t a_n = 5;
-	int64_t last_n = 1;
+	int64_t last_n = 3;
 	int64_t batch_size = 64;
 	int64_t buffer_size = 128;
 	int64_t max_iter = 1000; // legacy
@@ -43,9 +43,9 @@ int main_rpg() {
 	//torch::nn::AnyModule qNet(md::QNetState(s_n, a_n, last_n));
 	//torch::nn::AnyModule qNetTarget(md::QNetState(s_n, a_n, last_n));
 
-	torch::optim::Adam opt(qNet.ptr()->parameters(), torch::optim::AdamOptions(0.0001));
+	torch::optim::Adam opt(qNet.ptr()->parameters(), torch::optim::AdamOptions(0.001));
 
-	EpsilonGreedy xpa(1, 0.1, 0.99);
+	EpsilonGreedy xpa(1, 0, 0.993);
 
 	DQN dqn(rb, batch_size, qNet, qNetTarget, opt, xpa, 0, 0.98);
 

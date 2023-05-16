@@ -42,7 +42,7 @@ void GameSession::start() {
 				update();
 				t1 = std::chrono::high_resolution_clock::now();
 				d1 = std::chrono::duration_cast<std::chrono::microseconds>(t1 - t0);
-				std::cout << "full time: \n" << d1.count() << std::endl;
+				//std::cout << "full time: \n" << d1.count() << std::endl;
 				break;
 			case 2:
 				nextAction();
@@ -78,7 +78,7 @@ void GameSession::update() {
 		rla.update();
 		t1 = std::chrono::high_resolution_clock::now();
 		d1 = std::chrono::duration_cast<std::chrono::microseconds>(t1 - t0);
-		std::cout << "update time: \n" << d1.count() << std::endl;
+		//std::cout << "update time: \n" << d1.count() << std::endl;
 	}
 }
 
