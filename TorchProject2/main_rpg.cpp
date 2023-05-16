@@ -10,7 +10,7 @@ int main_rpg() {
 	int64_t es_n = 1;
 	int64_t as_n = 1;
 	int64_t a_n = 5;
-	int64_t last_n = 3;
+	int64_t last_n = 1;
 	int64_t batch_size = 64;
 	int64_t buffer_size = 128;
 	int64_t max_iter = 1000; // legacy
