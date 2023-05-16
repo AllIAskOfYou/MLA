@@ -50,27 +50,34 @@ void DQN::update() {
 	opt.zero_grad();
 
 	// create a block where no_grad is active
-	at::Tensor outQT, outQ, out, outQTA, targets, loss;
+	at::Tensor outQT, outQ, probA, out, outQTA, targets, loss;
 	{
 		at::NoGradGuard no_grad;
 
 		// calculate Q'(s', A')
 		outQT = qNetTarget.forward(rs.nStates);
 
-		// claculate Q(s', A')
+		// calculate Q(s', A')
 		qNet.ptr()->eval();
 		outQ = qNet.forward(rs.nStates);
-
-		// calculate Q(s', a')
-		outQTA = outQT.index({ at::arange(batch_size), outQ.argmax(1) });
-
-		// calculate target Q(s, a)
-		targets = rs.rewards + gamma * outQTA;
-
+		
 		// detach from graph for faster computation. we don't want to update targets parameters
 		// not really needed since NoGradAuard is active, but just to be save
-		targets = targets.detach();
+		outQT = outQT.detach();
+		outQ = outQ.detach();
 	}
+
+	// calculate prob(A' | s')
+	probA = xpa.prob(outQ);
+
+	// calculate E(Q(s', A'))
+	outQTA = (probA * outQT).sum(1);
+
+	// calculate Q(s', a')
+	// auto outQTA2 = outQT.index({ at::arange(batch_size), outQ.argmax(1) });
+
+	// calculate target Q(s, a)
+	targets = rs.rewards + gamma * outQTA;
 	
 	// calculate Q(s, A)
 	qNet.ptr()->train();

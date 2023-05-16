@@ -9,4 +9,5 @@ protected:
 public:
 	virtual void update() = 0;
 	virtual at::Tensor nextAction(at::Tensor qvalue) = 0;
+	virtual at::Tensor prob(at::Tensor qvalue) = 0;
 };

@@ -37,6 +37,9 @@
     <ClCompile Include="main_rpg.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Boltzmann.cpp">
+      <Filter>Source Files\algorithms\exploration</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Source Files">
@@ -124,6 +127,9 @@
     </ClInclude>
     <ClInclude Include="main_rpg.h">
       <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Boltzmann.h">
+      <Filter>Source Files\algorithms\exploration</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

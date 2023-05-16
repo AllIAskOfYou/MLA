@@ -177,6 +177,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     </ProjectReference>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Boltzmann.h" />
     <ClInclude Include="ConvBlock.h" />
     <ClInclude Include="ConvHead.h" />
     <ClInclude Include="DQN.h" />
@@ -200,6 +201,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <ClInclude Include="XPA.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Boltzmann.cpp" />
     <ClCompile Include="DQN.cpp" />
     <ClCompile Include="dqn_main.cpp" />
     <ClCompile Include="DTensor.cpp" />

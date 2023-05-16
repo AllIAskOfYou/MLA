@@ -4,6 +4,7 @@
 #include "DQN.h"
 #include "models.h"
 #include "EpsilonGreedy.h"
+#include "Boltzmann.h"
 
 int main_rpg() {
 	int64_t es_n = 1;
@@ -46,6 +47,7 @@ int main_rpg() {
 	torch::optim::Adam opt(qNet.ptr()->parameters(), torch::optim::AdamOptions(0.001));
 
 	EpsilonGreedy xpa(1, 0, 0.993);
+	//Boltzmann xpa(10, 0.5, 0.99);
 
 	DQN dqn(rb, batch_size, qNet, qNetTarget, opt, xpa, 0, 0.98);
 
