@@ -7,7 +7,8 @@
 
 namespace md {
 
-	class QNetConvImpl : public torch::nn::Module {
+	class QNetConvImpl : public torch::nn::Module
+	{
 	public:
 		QNetConvImpl(
 			int64_t es_n,
@@ -37,11 +38,11 @@ namespace md {
 					l *= 2;
 				}
 			}
-			
+
 			out->push_back(torch::nn::Linear(5 * dims[dims.size() - 1] * (last_n / l), units[0]));
 			for (int i = 1; i < units.size(); i++) {
 				out->push_back(torch::nn::ReLU());
-				out->push_back(torch::nn::Linear(units[i-1], units[i]));
+				out->push_back(torch::nn::Linear(units[i - 1], units[i]));
 			}
 
 			register_module("bn_es", bn_es);
@@ -65,7 +66,7 @@ namespace md {
 			at::Tensor aa = state.aActions;
 			at::Tensor oa = state.oActions;
 
-			auto t0 = std::chrono::high_resolution_clock::now();
+			//auto t0 = std::chrono::high_resolution_clock::now();
 
 			// normalize states representation per feature
 
@@ -95,14 +96,14 @@ namespace md {
 			aa = at::transpose(aa, 1, 2);
 			oa = at::transpose(oa, 1, 2);
 
-			auto t1 = std::chrono::high_resolution_clock::now();
+			//auto t1 = std::chrono::high_resolution_clock::now();
 			// conv
 			es = conv_es(es);
 			as = conv_as(as);
 			os = conv_as(os);
 			aa = conv_a(aa);
 			oa = conv_a(oa);
-			auto t2 = std::chrono::high_resolution_clock::now();
+			//auto t2 = std::chrono::high_resolution_clock::now();
 
 			es = es.flatten(1);
 			as = as.flatten(1);
@@ -114,11 +115,11 @@ namespace md {
 
 			//std::cout << "X: \n" << x << std::endl;
 			x = out->forward(x);
-			auto t3 = std::chrono::high_resolution_clock::now();
+			//auto t3 = std::chrono::high_resolution_clock::now();
 
-			auto d0 = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1);
-			auto d1 = std::chrono::duration_cast<std::chrono::microseconds>(t3 - t0);
-			std::cout << "full time: \n" << d1.count() << "ms\nconv: \n" << d0.count() << std::endl;
+			//auto d0 = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1);
+			//auto d1 = std::chrono::duration_cast<std::chrono::microseconds>(t3 - t0);
+			//std::cout << "full time: \n" << d1.count() << "ms\nconv: \n" << d0.count() << std::endl;
 			return x;
 		}
 

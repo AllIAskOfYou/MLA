@@ -4,7 +4,8 @@
 
 namespace md {
 
-class ConvBlockImpl: public torch::nn::Module {
+class ConvBlockImpl: public torch::nn::Module
+{
 public:
 	ConvBlockImpl(int64_t in_dim, int64_t out_dim, int64_t do_max_pool) :
 		conv(torch::nn::Conv1d(

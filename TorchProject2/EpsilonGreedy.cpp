@@ -27,6 +27,6 @@ at::Tensor EpsilonGreedy::nextAction(at::Tensor qvalue) {
 	else {
 		nAction = at::randint(0, qvalue.size(1), { 1 });
 	}
-	std::cout << "Epsilon: \n" << epsilon << std::endl;
+	//std::cout << "Epsilon: \n" << epsilon << std::endl;
 	return nAction;
 }

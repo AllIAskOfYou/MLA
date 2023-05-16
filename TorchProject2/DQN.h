@@ -31,7 +31,7 @@ public:
 	}
 
 private:
-	void update_params();
+	void update_params(float delta);
 
 private:
 	torch::nn::AnyModule qNet, qNetTarget;

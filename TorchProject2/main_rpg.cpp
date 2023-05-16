@@ -1,28 +1,29 @@
-#include "main_rps.h"
+#include "main_rpg.h"
+
 #include "GameSession.h"
 #include "DQN.h"
 #include "models.h"
 #include "EpsilonGreedy.h"
 
-int main_rps() {
+int main_rpg() {
 	int64_t es_n = 1;
 	int64_t as_n = 1;
-	int64_t a_n = 4;
-	int64_t last_n = 4;
-	int64_t batch_size = 32;
+	int64_t a_n = 5;
+	int64_t last_n = 1;
+	int64_t batch_size = 64;
 	int64_t buffer_size = 128;
-	int64_t max_iter = 1000;
+	int64_t max_iter = 1000; // legacy
 
-	std::vector<int64_t> dims = { 8, 8 };
-	std::vector<bool> pools = { true, false};
-	std::vector<int64_t> units = { 8, a_n };
+	std::vector<int64_t> dims = { 4 };
+	std::vector<bool> pools = { false };
+	std::vector<int64_t> units = { 4, a_n };
 
 
 	ReplayBuffer rb(buffer_size, last_n, es_n, as_n);
 
 	/*
 	torch::nn::Linear l(2, 3);
-	
+
 	torch::nn::Linear r = l;
 
 	auto lp = l->parameters();
@@ -33,20 +34,20 @@ int main_rps() {
 	*/
 
 	torch::nn::AnyModule qNet(
-		md::QNetConv(es_n, as_n, a_n, last_n, 8, 8, 8, dims, pools, units)
+		md::QNetConv(es_n, as_n, a_n, last_n, 4, 4, 4, dims, pools, units)
 	);
 	torch::nn::AnyModule qNetTarget(
-		md::QNetConv(es_n, as_n, a_n, last_n, 8, 8, 8, dims, pools, units)
+		md::QNetConv(es_n, as_n, a_n, last_n, 4, 4, 4, dims, pools, units)
 	);
 
 	//torch::nn::AnyModule qNet(md::QNetState(s_n, a_n, last_n));
 	//torch::nn::AnyModule qNetTarget(md::QNetState(s_n, a_n, last_n));
 
-	torch::optim::Adam opt(qNet.ptr()->parameters(), torch::optim::AdamOptions(0.001));
+	torch::optim::Adam opt(qNet.ptr()->parameters(), torch::optim::AdamOptions(0.0001));
 
-	EpsilonGreedy xpa(1, 0.1, 0.98);
+	EpsilonGreedy xpa(1, 0.1, 0.99);
 
-	DQN dqn(rb, batch_size, qNet, qNetTarget, opt, xpa, 0.5, 0.9);
+	DQN dqn(rb, batch_size, qNet, qNetTarget, opt, xpa, 0, 0.98);
 
 	GameSession gs(es_n, as_n, a_n, dqn, max_iter);
 	gs.start();
