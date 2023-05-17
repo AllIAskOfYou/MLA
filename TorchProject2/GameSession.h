@@ -24,6 +24,7 @@ public:
 	void start();
 
 private:
+	void push();
 	void update();
 	void nextAction();
 	void selfPlay();

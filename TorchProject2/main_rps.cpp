@@ -46,7 +46,7 @@ int main_rps() {
 
 	EpsilonGreedy xpa(1, 0.1, 0.98);
 
-	DQN dqn(rb, batch_size, qNet, qNetTarget, opt, xpa, 0.5, 0.9);
+	DQN dqn(rb, batch_size, qNet, qNetTarget, opt, xpa, 0.5, 0.9, 0);
 
 	GameSession gs(es_n, as_n, a_n, dqn, max_iter);
 	gs.start();

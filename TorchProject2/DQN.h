@@ -14,7 +14,8 @@ public:
 		torch::optim::Optimizer& opt,
 		XPA& xpa,
 		float gamma,
-		float delta
+		float delta,
+		int pUpdateWait
 	);
 
 	// takes one update step on one batch from replay buffer
@@ -38,5 +39,7 @@ private:
 	torch::optim::Optimizer& opt;
 	XPA& xpa;
 	float gamma, delta;
+	int pUpdateWait;
+	int pUpdateTimes = 0;
 };
 

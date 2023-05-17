@@ -29,6 +29,7 @@ RBSample ReplayBuffer::sample(int64_t batchSize) {
 	at::Tensor idx = prob.multinomial(batchSize, false) + 1;
 	RBSample smpl;
 
+	//std::cout << aStates.index(at::arange(size+1)) << std::endl;
 	smpl.states = get(idx - 1);
 	smpl.aActions = aActions.index(idx).index({at::indexing::Slice(), -1});
 	smpl.rewards = rewards.index(idx).flatten();

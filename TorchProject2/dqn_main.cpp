@@ -39,7 +39,7 @@ int mainImpl() {
 
 	EpsilonGreedy xpa(1, 0.1, 0.98);
 
-	DQN dqn(rb, batch_size, qNet, qNetTarget, opt, xpa, 0.9, 0.99);
+	DQN dqn(rb, batch_size, qNet, qNetTarget, opt, xpa, 0.9, 0.99, 0);
 	std::cout << "Yay" << std::endl;
 	
 	auto rs = dqn.get_rb().sample(buffer_size);

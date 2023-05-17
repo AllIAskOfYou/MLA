@@ -1,7 +1,5 @@
 #include "DQN.h"
 #include <iostream>
-#include <chrono>
-#include <thread>
 
 DQN::DQN(
 	ReplayBuffer& rb,
@@ -11,7 +9,8 @@ DQN::DQN(
 	torch::optim::Optimizer& opt,
 	XPA& xpa,
 	float gamma,
-	float delta
+	float delta,
+	int pUpdateWait
 ) :
 	RLA(rb, batch_size),
 	qNet(qNet),
@@ -19,7 +18,8 @@ DQN::DQN(
 	opt(opt),
 	xpa(xpa),
 	gamma(gamma),
-	delta(delta)
+	delta(delta),
+	pUpdateWait(pUpdateWait)
 {
 	// make the target network the same as the online net
 	update_params(0);
@@ -70,7 +70,7 @@ void DQN::update() {
 	// calculate prob(A' | s')
 	probA = xpa.prob(outQ);
 
-	// calculate E(Q(s', A'))
+	// calculate E(Q(s', A')) = SUM( prob(a'_i | s') * outQT(s', a'_i)) 
 	outQTA = (probA * outQT).sum(1);
 
 	// calculate Q(s', a')
@@ -89,26 +89,26 @@ void DQN::update() {
 	loss = torch::nn::MSELoss()(out, targets);//(outQ - targets).square().mean();
 	loss.backward();
 	opt.step();
-	//t.join();
-
 
 	// update target net parameters to be more like online net
-	update_params(delta);
-
-	//auto t1 = std::chrono::high_resolution_clock::now();
-	//auto d1 = std::chrono::duration_cast<std::chrono::microseconds>(t1 - t0);
-	//std::cout << "In update time: \n" << d1.count() << std::endl;
+	if (pUpdateTimes == pUpdateWait) {
+		update_params(delta);
+		pUpdateTimes = 0;
+	}
+	else {
+		pUpdateTimes++;
+	}
+	
 }
 
 // calculates new action given the curent policy
 at::Tensor DQN::nextAction() {
 	State state = rb.get(-1);
+
 	qNet.ptr()->eval();
 	at::Tensor out =  qNet.forward(state);
-	//std::cout << out << std::endl;
 
 	at::Tensor nAction = xpa.nextAction(out);
-	//std::cout << nAction << std::endl;
 
 	// update exploration method
 	xpa.update();
@@ -125,7 +125,6 @@ at::Tensor DQN::selfPlay() {
 
 	// predict on the older target q-net
 	at::Tensor out = qNetTarget.forward(state);
-	//std::cout << out << std::endl;
 
 	at::Tensor nAction = xpa.nextAction(out);
 
