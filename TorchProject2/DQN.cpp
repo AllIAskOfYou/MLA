@@ -83,6 +83,8 @@ void DQN::update() {
 	qNet.ptr()->train();
 	out = qNet.forward(rs.states);
 
+	std::cout << rs.states.aStates.index({ 0 }) << " : " << rs.aActions.index({ 0 }) << " -> " << rs.rewards.index({ 0 }) << "Out: " << out.index({0}) << std::endl;
+
 	// calculate Q(s, a)
 	out = out.index({ at::arange(batch_size), rs.aActions });
 

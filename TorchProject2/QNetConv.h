@@ -28,7 +28,7 @@ namespace md {
 			lin_as(torch::nn::Linear(as_n, as_emb)),
 			emb(torch::nn::Embedding(a_n, a_emb)),
 			conv_es(ConvHead(es_emb, dims, pools)),
-			conv_as(ConvHead(as_emb, dims, pools)),
+			conv_as(ConvHead(as_n, dims, pools)),
 			conv_a(ConvHead(a_emb, dims, pools)),
 			out(torch::nn::Sequential())
 		{
@@ -39,7 +39,7 @@ namespace md {
 				}
 			}
 
-			out->push_back(torch::nn::Linear(5 * dims[dims.size() - 1] * (last_n / l), units[0]));
+			out->push_back(torch::nn::Linear(1 * dims[dims.size() - 1] * (last_n / l), units[0]));
 			for (int i = 1; i < units.size(); i++) {
 				out->push_back(torch::nn::ReLU());
 				out->push_back(torch::nn::Linear(units[i - 1], units[i]));
@@ -60,58 +60,58 @@ namespace md {
 			State state
 		) 
 		{
-			at::Tensor es = state.eStates;
+			//at::Tensor es = state.eStates;
 			at::Tensor as = state.aStates;
-			at::Tensor os = state.oStates;
-			at::Tensor aa = state.aActions;
-			at::Tensor oa = state.oActions;
+			//at::Tensor os = state.oStates;
+			//at::Tensor aa = state.aActions;
+			//at::Tensor oa = state.oActions;
 
 			//auto t0 = std::chrono::high_resolution_clock::now();
 
 			// normalize states representation per feature
 
-			es = at::transpose(es, 1, 2);
-			as = at::transpose(as, 1, 2);
-			os = at::transpose(os, 1, 2);
-			es = bn_es(es);
-			as = bn_as(as);
-			os = bn_as(os);
-			es = at::transpose(es, 1, 2);
-			as = at::transpose(as, 1, 2);
-			os = at::transpose(os, 1, 2);
+			//es = at::transpose(es, 1, 2);
+			//as = at::transpose(as, 1, 2);
+			//os = at::transpose(os, 1, 2);
+			//es = bn_es(es);
+			//as = bn_as(as);
+			//os = bn_as(os);
+			//es = at::transpose(es, 1, 2);
+			//as = at::transpose(as, 1, 2);
+			//os = at::transpose(os, 1, 2);
 
 			// linearly transform ( B, L, s_n) -> ( B, L, s_emb)
-			es = lin_es(es);
-			as = lin_as(as);
-			os = lin_as(os);
+			//es = lin_es(es);
+			//as = lin_as(as);
+			//os = lin_as(os);
 
 			// linearly transform ( B, L ) -> ( B, L, C ) 
-			aa = emb(aa);
-			oa = emb(oa);
+			//aa = emb(aa);
+			//oa = emb(oa);
 
 			// transpose from ( B, L, C ) to ( B, C, L )
-			es = at::transpose(es, 1, 2);
+			//es = at::transpose(es, 1, 2);
 			as = at::transpose(as, 1, 2);
-			os = at::transpose(os, 1, 2);
-			aa = at::transpose(aa, 1, 2);
-			oa = at::transpose(oa, 1, 2);
+			//os = at::transpose(os, 1, 2);
+			//aa = at::transpose(aa, 1, 2);
+			//oa = at::transpose(oa, 1, 2);
 
 			//auto t1 = std::chrono::high_resolution_clock::now();
 			// conv
-			es = conv_es(es);
+			//es = conv_es(es);
 			as = conv_as(as);
-			os = conv_as(os);
-			aa = conv_a(aa);
-			oa = conv_a(oa);
+			//os = conv_as(os);
+			//aa = conv_a(aa);
+			//oa = conv_a(oa);
 			//auto t2 = std::chrono::high_resolution_clock::now();
 
-			es = es.flatten(1);
+			//es = es.flatten(1);
 			as = as.flatten(1);
-			os = os.flatten(1);
-			aa = aa.flatten(1);
-			oa = oa.flatten(1);
+			//os = os.flatten(1);
+			//aa = aa.flatten(1);
+			//oa = oa.flatten(1);
 
-			at::Tensor x = torch::cat({ es, as, os, aa, oa }, -1);
+			at::Tensor x = torch::cat({ as }, -1);
 
 			//std::cout << "X: \n" << x << std::endl;
 			x = out->forward(x);
