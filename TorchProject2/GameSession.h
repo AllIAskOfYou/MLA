@@ -47,7 +47,6 @@ private:
 	at::Tensor aa;
 	at::Tensor oa;
 	at::Tensor r;
-	at::Tensor next_oa;
 
 	// number of units read
 	int readReq, readES, readAS, readOS, readA, readR;

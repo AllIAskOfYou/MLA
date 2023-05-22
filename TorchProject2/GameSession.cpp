@@ -26,37 +26,37 @@ void GameSession::start() {
 	float req;
 	int d = 0;
 	float count = 0;
-	if (ps.connect("\\mla-server")) {
-		std::cout << "Connected!" << std::endl;
-		std::chrono::steady_clock::time_point t0, t1;
-		std::chrono::microseconds d1;
-		while (true) {
-			readReq = ps.recieveData(&req, 1);
-			if (readReq == 0) continue;
+	if (!ps.connect("\\mla-server")) return;
 
-			switch ((int)req) {
-			case 0:
-				return;
-				break;
-			case 1:
-				push();
-				break;
-			case 2:
-				t0 = std::chrono::high_resolution_clock::now();
-				update();
-				t1 = std::chrono::high_resolution_clock::now();
-				d1 = std::chrono::duration_cast<std::chrono::microseconds>(t1 - t0);
-				d += d1.count() / 1000;
-				count += 1;
-				//std::cout << "Update time: \n" << d / count << std::endl
-				break;
-			case 3:
-				nextAction();
-				break;
-			case 4:
-				selfPlay();
-				break;
-			}
+	std::cout << "Connected!" << std::endl;
+	std::chrono::steady_clock::time_point t0, t1;
+	std::chrono::microseconds d1;
+	while (true) {
+		readReq = ps.recieveData(&req, 1);
+		if (readReq == 0) continue;
+
+		switch ((int)req) {
+		case 0:
+			return;
+			break;
+		case 1:
+			push();
+			break;
+		case 2:
+			t0 = std::chrono::high_resolution_clock::now();
+			update();
+			t1 = std::chrono::high_resolution_clock::now();
+			d1 = std::chrono::duration_cast<std::chrono::microseconds>(t1 - t0);
+			d += d1.count() / 1000;
+			count += 1;
+			//std::cout << "Update time: \n" << d / count << std::endl
+			break;
+		case 3:
+			nextAction();
+			break;
+		case 4:
+			selfPlay();
+			break;
 		}
 	}
 }

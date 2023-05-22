@@ -34,7 +34,7 @@ int main_rpg() {
 
 	torch::optim::Adam opt(qNet.ptr()->parameters(), torch::optim::AdamOptions(0.01));
 
-	EpsilonGreedy xpa(1.7, 0.25, 0.993);
+	EpsilonGreedy xpa(2.2, 0.25, 0.994);
 	//Boltzmann xpa(10, 0.5, 0.99);
 
 	DQN dqn(rb, batch_size, qNet, qNetTarget, opt, xpa, 0, 0.98, 0);

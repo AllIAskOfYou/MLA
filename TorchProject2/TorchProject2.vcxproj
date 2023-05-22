@@ -190,6 +190,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <ClInclude Include="models.h" />
     <ClInclude Include="QNetBasic.h" />
     <ClInclude Include="QNetConv.h" />
+    <ClInclude Include="QNetConvGoMid.h" />
     <ClInclude Include="QNetSimpl.h" />
     <ClInclude Include="PipeServer.h" />
     <ClInclude Include="QNetState.h" />
