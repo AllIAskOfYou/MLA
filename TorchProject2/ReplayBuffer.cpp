@@ -23,6 +23,8 @@ void ReplayBuffer::push(
 	aActions.push(aa);
 	oActions.push(oa);
 	rewards.push(r);
+
+	update_steps++;
 }
 
 RBSample ReplayBuffer::sample(int64_t batchSize) {

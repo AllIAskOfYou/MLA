@@ -34,4 +34,7 @@ private:
 	DTensor oActions;
 	DTensor rewards;
 	at::Tensor prob;
+
+public:
+	int64_t update_steps = 0;
 };

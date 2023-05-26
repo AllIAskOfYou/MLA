@@ -83,7 +83,7 @@ void DQN::update() {
 	qNet.ptr()->train();
 	out = qNet.forward(rs.states);
 
-	std::cout << rs.states.aStates.index({ 0 }) << " : " << rs.aActions.index({ 0 }) << " -> " << rs.rewards.index({ 0 }) << "Out: " << out.index({0}) << std::endl;
+	//std::cout << rs.states.aStates.index({ 0 }) << " : " << rs.aActions.index({ 0 }) << " -> " << rs.rewards.index({ 0 }) << "Out: " << out.index({0}) << std::endl;
 
 	// calculate Q(s, a)
 	out = out.index({ at::arange(batch_size), rs.aActions });
@@ -100,7 +100,6 @@ void DQN::update() {
 	else {
 		pUpdateTimes++;
 	}
-	
 }
 
 // calculates new action given the curent policy
@@ -113,7 +112,10 @@ at::Tensor DQN::nextAction() {
 	at::Tensor nAction = xpa.nextAction(out);
 
 	// update exploration method
-	xpa.update();
+
+	if (rb.update_steps >= batch_size) {
+		xpa.update();
+	}
 
 	return nAction;
 }

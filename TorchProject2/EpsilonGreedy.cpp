@@ -4,17 +4,20 @@
 EpsilonGreedy::EpsilonGreedy(
 	float epsilon,
 	float minEpsilon,
-	float decay
+	float steps
 ) :
 	epsilon(epsilon),
 	minEpsilon(minEpsilon),
-	decay(decay)
+	decay(pow(minEpsilon/epsilon, 1/steps))
 {}
 
 void EpsilonGreedy::update() {
 	epsilon *= decay;
 	if (epsilon < minEpsilon) {
 		epsilon = minEpsilon;
+	}
+	else {
+		std::cout << "Epsilon: \n" << epsilon << std::endl;
 	}
 }
 
@@ -27,7 +30,6 @@ at::Tensor EpsilonGreedy::nextAction(at::Tensor qvalue) {
 	else {
 		nAction = at::randint(0, qvalue.size(1), { 1 });
 	}
-	std::cout << "Epsilon: \n" << epsilon << std::endl;
 	return nAction;
 }
 
