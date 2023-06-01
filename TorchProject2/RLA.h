@@ -18,10 +18,11 @@ public:
 		at::Tensor os,
 		at::Tensor aa,
 		at::Tensor oa,
-		at::Tensor r
+		at::Tensor r,
+		at::Tensor t
 	)
 	{
-		rb.push(es, as, os, aa, oa, r);
+		rb.push(es, as, os, aa, oa, r, t);
 	}
 
 public:

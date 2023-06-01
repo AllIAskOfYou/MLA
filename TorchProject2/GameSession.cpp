@@ -20,6 +20,7 @@ GameSession::GameSession(
 	aa = at::zeros({ 1 });
 	oa = at::zeros({ 1 });
 	r = at::zeros({ 1 });
+	t = at::zeros({ 1 });
 };
 
 void GameSession::start() {
@@ -68,12 +69,13 @@ void GameSession::push() {
 	readOS = ps.recieveData(os.data_ptr<float>(), as_n);
 	readA = ps.recieveData(oa.data_ptr<float>(), 1);
 	readR = ps.recieveData(r.data_ptr<float>(), 1);
+	readT = ps.recieveData(t.data_ptr<float>(), 1);
 
 	// if bad data, continue
-	if (readES <= 0 || readAS <= 0 || readOS <= 0 || readA <= 0 || readR <= 0) return;
+	if (readES <= 0 || readAS <= 0 || readOS <= 0 ||readA <= 0 || readR <= 0 || readT <= 0) return;
 
 	// save new state, actions and reward
-	rla.push(es, as, os, aa, oa, r);
+	rla.push(es, as, os, aa, oa, r, t);
 }
 
 void GameSession::update() {

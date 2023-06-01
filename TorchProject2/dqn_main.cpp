@@ -21,10 +21,10 @@ int mainImpl() {
 	at::Tensor r = at::tensor({ 0 }, torch::dtype(torch::kFloat32));
 
 	ReplayBuffer rb(buffer_size, last_n, es_n, as_n);
-	rb.push(s, s, s, aa, oa, r);
-	rb.push(s, s, s, aa, oa, r+1);
-	rb.push(s, s, s, aa, oa, r+2);
-	rb.push(s, s, s, aa, oa, r+3);
+	rb.push(s, s, s, aa, oa, r, r);
+	rb.push(s, s, s, aa, oa, r+1, r);
+	rb.push(s, s, s, aa, oa, r+2, r);
+	rb.push(s, s, s, aa, oa, r+3, r);
 
 	std::vector<int64_t> dims = { 8, 8 };
 	std::vector<bool> pools = { true, false };

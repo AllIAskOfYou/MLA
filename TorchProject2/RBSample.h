@@ -8,4 +8,5 @@ typedef struct RBSample {
 	at::Tensor aActions;	// agent actions		(t)
 	at::Tensor rewards;		// rewards				(t)
 	State nStates;			// next states			(t+1)
+	at::Tensor terminal;	// is next state terminal?
 } RBSample;

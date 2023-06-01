@@ -47,9 +47,10 @@ private:
 	at::Tensor aa;
 	at::Tensor oa;
 	at::Tensor r;
+	at::Tensor t;
 
 	// number of units read
-	int readReq, readES, readAS, readOS, readA, readR;
+	int readReq, readES, readAS, readOS, readA, readR, readT;
 
 	// pipe server routes for comunication with a game process
 	PipeServer ps;

@@ -16,9 +16,9 @@ void EpsilonGreedy::update() {
 	if (epsilon < minEpsilon) {
 		epsilon = minEpsilon;
 	}
-	else {
-		std::cout << "Epsilon: \n" << epsilon << std::endl;
-	}
+	//else {
+	//	std::cout << "Epsilon: \n" << epsilon << std::endl;
+	//}
 }
 
 at::Tensor EpsilonGreedy::nextAction(at::Tensor qvalue) {

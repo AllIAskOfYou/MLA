@@ -39,7 +39,7 @@ namespace md {
 				}
 			}
 
-			out->push_back(torch::nn::Linear(2 * dims[dims.size() - 1] * (last_n / l), units[0]));
+			out->push_back(torch::nn::Linear(4 * dims[dims.size() - 1] * (last_n / l), units[0]));
 			for (int i = 1; i < units.size(); i++) {
 				out->push_back(torch::nn::ReLU());
 				out->push_back(torch::nn::Linear(units[i - 1], units[i]));
@@ -62,8 +62,8 @@ namespace md {
 		{
 			//at::Tensor es = state.eStates;
 			at::Tensor as = state.aStates;
-			//at::Tensor os = state.oStates;
-			//at::Tensor aa = state.aActions;
+			at::Tensor os = state.oStates;
+			at::Tensor aa = state.aActions;
 			at::Tensor oa = state.oActions;
 
 			//auto t0 = std::chrono::high_resolution_clock::now();
@@ -86,32 +86,32 @@ namespace md {
 			//os = lin_as(os);
 
 			// linearly transform ( B, L ) -> ( B, L, C ) 
-			//aa = emb(aa);
+			aa = emb(aa);
 			oa = emb(oa);
 
 			// transpose from ( B, L, C ) to ( B, C, L )
 			//es = at::transpose(es, 1, 2);
 			as = at::transpose(as, 1, 2);
-			//os = at::transpose(os, 1, 2);
-			//aa = at::transpose(aa, 1, 2);
+			os = at::transpose(os, 1, 2);
+			aa = at::transpose(aa, 1, 2);
 			oa = at::transpose(oa, 1, 2);
 
 			//auto t1 = std::chrono::high_resolution_clock::now();
 			// conv
 			//es = conv_es(es);
 			as = conv_as(as);
-			//os = conv_as(os);
-			//aa = conv_a(aa);
+			os = conv_as(os);
+			aa = conv_a(aa);
 			oa = conv_a(oa);
 			//auto t2 = std::chrono::high_resolution_clock::now();
 
 			//es = es.flatten(1);
 			as = as.flatten(1);
-			//os = os.flatten(1);
-			//aa = aa.flatten(1);
+			os = os.flatten(1);
+			aa = aa.flatten(1);
 			oa = oa.flatten(1);
 
-			at::Tensor x = torch::cat({ as, oa }, -1);
+			at::Tensor x = torch::cat({ as, os, aa, oa }, -1);
 
 			//std::cout << "X: \n" << x << std::endl;
 			x = out->forward(x);

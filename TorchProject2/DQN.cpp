@@ -77,7 +77,7 @@ void DQN::update() {
 	// auto outQTA2 = outQT.index({ at::arange(batch_size), outQ.argmax(1) });
 
 	// calculate target Q(s, a)
-	targets = rs.rewards + gamma * outQTA;
+	targets = rs.rewards + gamma * outQTA * rs.terminal;
 	
 	// calculate Q(s, A)
 	qNet.ptr()->train();
@@ -106,15 +106,16 @@ void DQN::update() {
 at::Tensor DQN::nextAction() {
 	State state = rb.get(-1);
 
+
 	qNet.ptr()->eval();
 	at::Tensor out =  qNet.forward(state);
 
 	at::Tensor nAction = xpa.nextAction(out);
 
 	// update exploration method
-
 	if (rb.update_steps >= batch_size) {
 		xpa.update();
+		//std::cout << state.aStates << std::endl;
 	}
 
 	return nAction;
