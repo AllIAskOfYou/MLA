@@ -1,4 +1,5 @@
 #include "Tree.h"
+#include <iostream>
 
 Tree::Tree(int64_t size) :
 	size(size)
@@ -30,12 +31,41 @@ void Tree::update_batch(
 	}
 }
 
+void Tree::update_batch(
+	at::Tensor indexes,
+	at::Tensor pes
+)
+{
+	auto indexes_ptr = indexes.data<int64_t>();
+	auto pes_ptr = pes.data<float>();
+	for (size_t i = 0; i < indexes.size(0); i++) {
+		update(*(indexes_ptr + i), *(pes_ptr + i));
+	}
+}
+
 std::vector<float> Tree::get(std::vector<int64_t> indexes) {
 	std::vector<float> pes(indexes.size());
 	for (size_t i = 0; i < indexes.size(); i++) {
 		pes[i] = nodes[rel2abs(indexes[i])];
 	}
 	return pes;
+}
+
+
+at::Tensor Tree::get(at::Tensor indexes) {
+	at::Tensor pes = at::empty(
+		indexes.sizes(),
+		at::TensorOptions().dtype(c10::ScalarType::Float)
+	);
+	auto indexes_ptr = indexes.data<int64_t>();
+	for (int64_t i = 0; i < indexes.size(0); i++) {
+
+		pes[i] = nodes[rel2abs(*(indexes_ptr + i))];
+	}
+	return pes;
+	//auto ptr = indexes.data<int64_t>();
+	//auto tmp = std::vector<int64_t>(ptr, ptr + indexes.size(0));
+	//get(tmp);
 }
 
 float Tree::get_value() {

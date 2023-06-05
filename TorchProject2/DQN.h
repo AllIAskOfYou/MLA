@@ -32,6 +32,7 @@ public:
 	}
 
 protected:
+	at::Tensor calculate_err(RBSample rs);
 	void update_params(float delta);
 
 protected:

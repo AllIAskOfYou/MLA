@@ -2,6 +2,7 @@
 
 #include "GameSession.h"
 #include "DQN.h"
+#include "PDQN.h"
 #include "models.h"
 #include "EpsilonGreedy.h"
 #include "Boltzmann.h"
@@ -37,7 +38,9 @@ int main_rpg() {
 	EpsilonGreedy xpa(1, 0.1, buffer_size);
 	//Boltzmann xpa(10, 0.5, 0.99);
 
-	DQN dqn(rb, batch_size, qNet, qNetTarget, opt, xpa, 0.9, 0.995, 0);
+	PESampler pes(buffer_size, 0.6, 0.5);
+
+	PDQN dqn(rb, batch_size, qNet, qNetTarget, opt, xpa, 0.9, 0.995, 0, pes);
 
 	GameSession gs(es_n, as_n, a_n, dqn, max_iter);
 	gs.start();

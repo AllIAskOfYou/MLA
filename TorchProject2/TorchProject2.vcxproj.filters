@@ -40,23 +40,23 @@
     <ClCompile Include="Boltzmann.cpp">
       <Filter>Source Files\algorithms\exploration</Filter>
     </ClCompile>
-    <ClCompile Include="SumTree.cpp">
-      <Filter>Source Files\utils</Filter>
-    </ClCompile>
     <ClCompile Include="main_sumtree.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="MaxTree.cpp">
-      <Filter>Source Files\utils</Filter>
-    </ClCompile>
-    <ClCompile Include="Tree.cpp">
-      <Filter>Source Files\utils</Filter>
-    </ClCompile>
-    <ClCompile Include="PERB.cpp">
-      <Filter>Source Files\utils</Filter>
-    </ClCompile>
     <ClCompile Include="PDQN.cpp">
       <Filter>Source Files\algorithms</Filter>
+    </ClCompile>
+    <ClCompile Include="MaxTree.cpp">
+      <Filter>Source Files\utils\trees</Filter>
+    </ClCompile>
+    <ClCompile Include="SumTree.cpp">
+      <Filter>Source Files\utils\trees</Filter>
+    </ClCompile>
+    <ClCompile Include="Tree.cpp">
+      <Filter>Source Files\utils\trees</Filter>
+    </ClCompile>
+    <ClCompile Include="PESampler.cpp">
+      <Filter>Source Files\utils</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -80,6 +80,9 @@
     </Filter>
     <Filter Include="Source Files\structs">
       <UniqueIdentifier>{32f396ba-e557-4c17-9e21-cf0225fa9564}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\utils\trees">
+      <UniqueIdentifier>{9a45f5c9-19ad-4588-9269-4090823468e3}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -152,22 +155,22 @@
     <ClInclude Include="QNetConvGoMid.h">
       <Filter>Source Files\models</Filter>
     </ClInclude>
-    <ClInclude Include="SumTree.h">
-      <Filter>Source Files\utils</Filter>
-    </ClInclude>
     <ClInclude Include="main_sumtree.h">
       <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="MaxTree.h">
-      <Filter>Source Files\utils</Filter>
-    </ClInclude>
-    <ClInclude Include="Tree.h">
-      <Filter>Source Files\utils</Filter>
     </ClInclude>
     <ClInclude Include="PDQN.h">
       <Filter>Source Files\algorithms</Filter>
     </ClInclude>
-    <ClInclude Include="PERB.h">
+    <ClInclude Include="MaxTree.h">
+      <Filter>Source Files\utils\trees</Filter>
+    </ClInclude>
+    <ClInclude Include="SumTree.h">
+      <Filter>Source Files\utils\trees</Filter>
+    </ClInclude>
+    <ClInclude Include="Tree.h">
+      <Filter>Source Files\utils\trees</Filter>
+    </ClInclude>
+    <ClInclude Include="PESampler.h">
       <Filter>Source Files\utils</Filter>
     </ClInclude>
   </ItemGroup>

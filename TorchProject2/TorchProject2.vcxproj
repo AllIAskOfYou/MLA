@@ -191,7 +191,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <ClInclude Include="MaxTree.h" />
     <ClInclude Include="models.h" />
     <ClInclude Include="PDQN.h" />
-    <ClInclude Include="PERB.h" />
+    <ClInclude Include="PESampler.h" />
     <ClInclude Include="QNetBasic.h" />
     <ClInclude Include="QNetConv.h" />
     <ClInclude Include="QNetConvGoMid.h" />
@@ -221,7 +221,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <ClCompile Include="main_rps.cpp" />
     <ClCompile Include="MaxTree.cpp" />
     <ClCompile Include="PDQN.cpp" />
-    <ClCompile Include="PERB.cpp" />
+    <ClCompile Include="PESampler.cpp" />
     <ClCompile Include="PipeServer.cpp" />
     <ClCompile Include="ReplayBuffer.cpp" />
     <ClCompile Include="main_sumtree.cpp" />

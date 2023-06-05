@@ -45,12 +45,30 @@ void DQN::update() {
 
 	// sample one batch from replay buffer
 	RBSample rs = rb.sample(batch_size);
-	
+
+	at::Tensor err, loss;
+
 	// zero the grads
 	opt.zero_grad();
 
+	err = calculate_err(rs);
+	loss = err.square().mean();
+	loss.backward();
+	opt.step();
+
+	// update target net parameters to be more like online net
+	if (pUpdateTimes == pUpdateWait) {
+		update_params(delta);
+		pUpdateTimes = 0;
+	}
+	else {
+		pUpdateTimes++;
+	}
+}
+
+at::Tensor DQN::calculate_err(RBSample rs) {
 	// create a block where no_grad is active
-	at::Tensor outQT, outQ, probA, out, outQTA, targets, loss;
+	at::Tensor outQT, outQ, probA, out, outQTA, targets;
 	{
 		at::NoGradGuard no_grad;
 
@@ -60,7 +78,7 @@ void DQN::update() {
 		// calculate Q(s', A')
 		qNet.ptr()->eval();
 		outQ = qNet.forward(rs.nStates);
-		
+
 		// detach from graph for faster computation. we don't want to update targets parameters
 		// not really needed since NoGradAuard is active, but just to be save
 		outQT = outQT.detach();
@@ -78,7 +96,7 @@ void DQN::update() {
 
 	// calculate target Q(s, a)
 	targets = rs.rewards + gamma * outQTA * rs.terminal;
-	
+
 	// calculate Q(s, A)
 	qNet.ptr()->train();
 	out = qNet.forward(rs.states);
@@ -88,18 +106,8 @@ void DQN::update() {
 	// calculate Q(s, a)
 	out = out.index({ at::arange(batch_size), rs.aActions });
 
-	loss = torch::nn::MSELoss()(out, targets);//(outQ - targets).square().mean();
-	loss.backward();
-	opt.step();
-
-	// update target net parameters to be more like online net
-	if (pUpdateTimes == pUpdateWait) {
-		update_params(delta);
-		pUpdateTimes = 0;
-	}
-	else {
-		pUpdateTimes++;
-	}
+	// return diff
+	return targets - out;
 }
 
 // calculates new action given the curent policy

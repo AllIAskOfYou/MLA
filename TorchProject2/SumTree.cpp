@@ -37,6 +37,23 @@ int64_t SumTree::sample(float pe) {
 	return abs2rel(node);
 }
 
+at::Tensor SumTree::sample_batch(int64_t batch_size) {
+	at::Tensor indexes = at::empty(
+		{batch_size},
+		at::TensorOptions().dtype(c10::ScalarType::Long)
+	);
+
+	float segment = nodes[0] / batch_size;
+	float rnd;
+	for (size_t i = 0; i < batch_size; i++) {
+		rnd = (float)(std::rand()) / (float)(RAND_MAX);
+		rnd = segment * (rnd + (float)i);
+		indexes[i] = sample(rnd);
+	}
+	return indexes;
+}
+
+/*
 std::vector<int64_t> SumTree::sample_batch(int64_t batch_size) {
 	std::vector<int64_t> indexes(batch_size);
 
@@ -49,3 +66,4 @@ std::vector<int64_t> SumTree::sample_batch(int64_t batch_size) {
 	}
 	return indexes;
 }
+*/

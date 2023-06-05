@@ -12,7 +12,7 @@ protected:
 	{}
 
 public:
-	void push(
+	virtual void push(
 		at::Tensor es,
 		at::Tensor as,
 		at::Tensor os,

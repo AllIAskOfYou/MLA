@@ -3,8 +3,7 @@
 #include <torch/torch.h>
 #include "DQN.h"
 #include "XPA.h"
-#include "SumTree.h"
-#include "MaxTree.h"
+#include "PESampler.h"
 
 class PDQN : public DQN {
 public:
@@ -17,7 +16,8 @@ public:
 		XPA& xpa,
 		float gamma,
 		float delta,
-		int pUpdateWait
+		int pUpdateWait,
+		PESampler& pes
 	);
 
 	// push method has to be modifed for the needs of priori. exp. buffer
@@ -29,13 +29,11 @@ public:
 		at::Tensor oa,
 		at::Tensor r,
 		at::Tensor t
-	);
+	) override;
 
 	// takes one update step on one batch from replay buffer
-	void update();
+	void update() override;
 
 private:
-	float alpha, beta;
-	MaxTree mTree;
-	SumTree sTree;
+	PESampler& pes;
 };

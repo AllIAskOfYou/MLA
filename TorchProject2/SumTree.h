@@ -8,5 +8,5 @@ public:
 
 	void update_(int64_t index, float pe);
 	int64_t sample(float pe);
-	std::vector<int64_t> sample_batch(int64_t batch_size);
+	at::Tensor sample_batch(int64_t batch_size);
 };
