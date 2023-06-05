@@ -31,10 +31,10 @@ public:
 		return rb;
 	}
 
-private:
+protected:
 	void update_params(float delta);
 
-private:
+protected:
 	torch::nn::AnyModule qNet, qNetTarget;
 	torch::optim::Optimizer& opt;
 	XPA& xpa;

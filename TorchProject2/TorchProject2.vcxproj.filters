@@ -40,6 +40,24 @@
     <ClCompile Include="Boltzmann.cpp">
       <Filter>Source Files\algorithms\exploration</Filter>
     </ClCompile>
+    <ClCompile Include="SumTree.cpp">
+      <Filter>Source Files\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="main_sumtree.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MaxTree.cpp">
+      <Filter>Source Files\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Tree.cpp">
+      <Filter>Source Files\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="PERB.cpp">
+      <Filter>Source Files\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="PDQN.cpp">
+      <Filter>Source Files\algorithms</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Source Files">
@@ -133,6 +151,24 @@
     </ClInclude>
     <ClInclude Include="QNetConvGoMid.h">
       <Filter>Source Files\models</Filter>
+    </ClInclude>
+    <ClInclude Include="SumTree.h">
+      <Filter>Source Files\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="main_sumtree.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MaxTree.h">
+      <Filter>Source Files\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Tree.h">
+      <Filter>Source Files\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="PDQN.h">
+      <Filter>Source Files\algorithms</Filter>
+    </ClInclude>
+    <ClInclude Include="PERB.h">
+      <Filter>Source Files\utils</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

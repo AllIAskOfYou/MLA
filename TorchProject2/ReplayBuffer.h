@@ -25,6 +25,8 @@ public:
 
 	State get(at::Tensor idx);
 	State get(int64_t index);
+	RBSample get_sample(at::Tensor idx);
+	int64_t get_size() { return size; }
 
 private:
 	int64_t size;

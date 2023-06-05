@@ -187,7 +187,11 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <ClInclude Include="GameSession.h" />
     <ClInclude Include="main_rpg.h" />
     <ClInclude Include="main_rps.h" />
+    <ClInclude Include="main_sumtree.h" />
+    <ClInclude Include="MaxTree.h" />
     <ClInclude Include="models.h" />
+    <ClInclude Include="PDQN.h" />
+    <ClInclude Include="PERB.h" />
     <ClInclude Include="QNetBasic.h" />
     <ClInclude Include="QNetConv.h" />
     <ClInclude Include="QNetConvGoMid.h" />
@@ -198,7 +202,9 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <ClInclude Include="State.h" />
     <ClInclude Include="ReplayBuffer.h" />
     <ClInclude Include="RLA.h" />
+    <ClInclude Include="SumTree.h" />
     <ClInclude Include="tensoroptions.h" />
+    <ClInclude Include="Tree.h" />
     <ClInclude Include="XPA.h" />
   </ItemGroup>
   <ItemGroup>
@@ -213,8 +219,14 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <ClCompile Include="main_caller.cpp" />
     <ClCompile Include="main_rpg.cpp" />
     <ClCompile Include="main_rps.cpp" />
+    <ClCompile Include="MaxTree.cpp" />
+    <ClCompile Include="PDQN.cpp" />
+    <ClCompile Include="PERB.cpp" />
     <ClCompile Include="PipeServer.cpp" />
     <ClCompile Include="ReplayBuffer.cpp" />
+    <ClCompile Include="main_sumtree.cpp" />
+    <ClCompile Include="SumTree.cpp" />
+    <ClCompile Include="Tree.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
