@@ -18,6 +18,7 @@ public:
 	);
 	void update_batch(at::Tensor indexes, at::Tensor pes);
 
+	float get(int64_t idx);
 	std::vector<float> get(std::vector<int64_t> indexes);
 	at::Tensor get(at::Tensor indexes);
 

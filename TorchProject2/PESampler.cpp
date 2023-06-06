@@ -29,11 +29,18 @@ at::Tensor PESampler::sample(int64_t batch_size) {
 	);
 
 	float segment = sTree.get_value() / batch_size;
-	float rnd;
+	float rnd, idx, pe(0);
 	for (size_t i = 0; i < batch_size; i++) {
-		rnd = (float)(std::rand()) / (float)(RAND_MAX);
-		rnd = segment * (rnd + (float)i);
-		indexes[i] = sTree.sample(rnd);
+		for (int i = 0; i < 5; i++) {
+			rnd = (float)(std::rand()) / (float)(RAND_MAX);
+			rnd = segment * (rnd + (float)i);
+			idx = sTree.sample(rnd);
+			pe = sTree.get(idx);
+			if (pe != 0) {
+				break;
+			}
+		}
+		indexes[i] = idx;
 	}
 	return indexes;
 }
@@ -42,7 +49,8 @@ at::Tensor PESampler::get_weights(at::Tensor indexes) {
 	at::Tensor weights = sTree.get(indexes);
 	weights /= sTree.get_value();
 	weights = (buffer_size * weights).pow(-beta);
-	weights /= weights.max();
+	weights /= weights.sum();
+	std::cout << weights.index({ at::indexing::Slice(0, 10) }) << std::endl;
 	return weights;
 }
 
@@ -53,6 +61,6 @@ void PESampler::update(at::Tensor indexes, at::Tensor err) {
 	sTree.update_batch(indexes, pes);
 	mTree.update_batch(indexes, pes);
 
-	beta += 0.00005;
+	beta += 0.0005;
 	beta = beta >= 1 ? 1 : beta;
 }

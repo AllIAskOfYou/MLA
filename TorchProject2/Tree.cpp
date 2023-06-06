@@ -43,6 +43,10 @@ void Tree::update_batch(
 	}
 }
 
+float Tree::get(int64_t idx) {
+	return nodes[rel2abs(idx)];
+}
+
 std::vector<float> Tree::get(std::vector<int64_t> indexes) {
 	std::vector<float> pes(indexes.size());
 	for (size_t i = 0; i < indexes.size(); i++) {

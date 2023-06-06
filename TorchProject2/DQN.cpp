@@ -7,6 +7,7 @@ DQN::DQN(
 	torch::nn::AnyModule qNet,
 	torch::nn::AnyModule qNetTarget,
 	torch::optim::Optimizer& opt,
+	torch::optim::LRScheduler& lrs,
 	XPA& xpa,
 	float gamma,
 	float delta,
@@ -16,6 +17,7 @@ DQN::DQN(
 	qNet(qNet),
 	qNetTarget(qNetTarget),
 	opt(opt),
+	lrs(lrs),
 	xpa(xpa),
 	gamma(gamma),
 	delta(delta),
@@ -55,6 +57,7 @@ void DQN::update() {
 	loss = err.square().mean();
 	loss.backward();
 	opt.step();
+	lrs.step();
 
 	// update target net parameters to be more like online net
 	if (pUpdateTimes == pUpdateWait) {

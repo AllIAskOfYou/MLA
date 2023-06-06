@@ -12,6 +12,7 @@ public:
 	at::Tensor get(int64_t index);
 
 	void push(at::Tensor value);
+	void pushEmpty();
 
 	at::Tensor DTensor::index(at::Tensor indices);
 

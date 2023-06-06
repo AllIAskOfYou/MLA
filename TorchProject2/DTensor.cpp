@@ -18,6 +18,11 @@ void DTensor::push(at::Tensor value) {
 	start = (start + 1) % tensor.size(0);
 }
 
+void DTensor::pushEmpty() {
+	tensor.index({ start, Slice() }) = 0;
+	start = (start + 1) % tensor.size(0);
+}
+
 at::Tensor DTensor::index(at::Tensor indices) {
 	return tensor.index({ (indices + start) % tensor.size(0) });
 }

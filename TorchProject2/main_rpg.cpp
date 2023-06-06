@@ -6,6 +6,7 @@
 #include "models.h"
 #include "EpsilonGreedy.h"
 #include "Boltzmann.h"
+#include "LinearLRS.h"
 
 int main_rpg() {
 	int64_t es_n = 1;
@@ -35,12 +36,15 @@ int main_rpg() {
 
 	torch::optim::Adam opt(qNet.ptr()->parameters(), torch::optim::AdamOptions(0.001));
 
-	EpsilonGreedy xpa(1, 0.1, buffer_size);
+	LinearLRS lrs(opt, 100, 1, 0.01, 2*buffer_size);
+
+	EpsilonGreedy xpa(1, 0.1, 2*buffer_size);
 	//Boltzmann xpa(10, 0.5, 0.99);
 
 	PESampler pes(buffer_size, 0.6, 0.5);
 
-	PDQN dqn(rb, batch_size, qNet, qNetTarget, opt, xpa, 0.9, 0.995, 0, pes);
+	//PDQN dqn(rb, batch_size, qNet, qNetTarget, opt, xpa, 0, 0.98, 0, pes);
+	DQN dqn(rb, batch_size, qNet, qNetTarget, opt, lrs, xpa, 0.9, 0.995, 0);
 
 	GameSession gs(es_n, as_n, a_n, dqn, max_iter);
 	gs.start();

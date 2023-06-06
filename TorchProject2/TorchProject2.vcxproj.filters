@@ -58,6 +58,9 @@
     <ClCompile Include="PESampler.cpp">
       <Filter>Source Files\utils</Filter>
     </ClCompile>
+    <ClCompile Include="LinearLRS.cpp">
+      <Filter>Source Files\schedulers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Source Files">
@@ -83,6 +86,9 @@
     </Filter>
     <Filter Include="Source Files\utils\trees">
       <UniqueIdentifier>{9a45f5c9-19ad-4588-9269-4090823468e3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\schedulers">
+      <UniqueIdentifier>{4121aea3-13d7-4229-acb0-a25dc8d8ab1f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -172,6 +178,9 @@
     </ClInclude>
     <ClInclude Include="PESampler.h">
       <Filter>Source Files\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="LinearLRS.h">
+      <Filter>Source Files\schedulers</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

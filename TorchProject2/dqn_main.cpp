@@ -39,10 +39,10 @@ int mainImpl() {
 
 	EpsilonGreedy xpa(1, 0.1, 0.98);
 
-	DQN dqn(rb, batch_size, qNet, qNetTarget, opt, xpa, 0.9, 0.99, 0);
+	//DQN dqn(rb, batch_size, qNet, qNetTarget, opt, xpa, 0.9, 0.99, 0);
 	std::cout << "Yay" << std::endl;
 	
-	auto rs = dqn.get_rb().sample(buffer_size);
+	//auto rs = dqn.get_rb().sample(buffer_size);
 	std::cout << "Yay" << std::endl;
 	/*
 	std::cout << rs.states << "\n" << rs.oActions << std::endl;
@@ -55,6 +55,8 @@ int mainImpl() {
 	auto cat = torch::cat({lin, emb}, -1);
 	std::cout << cat << std::endl;
 	*/
+
+	/*
 	std::cout << qNetTarget.forward(rs.states) << std::endl;
 
 	std::cout << "Yay" << std::endl;
@@ -80,5 +82,6 @@ int mainImpl() {
 	std::cout << "Update dela" << std::endl;
 
 	std::cout << "Next action: \n" << nAction << std::endl;
+	*/
 	return 0;
 }

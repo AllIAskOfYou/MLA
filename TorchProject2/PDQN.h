@@ -13,6 +13,7 @@ public:
 		torch::nn::AnyModule qNet,
 		torch::nn::AnyModule qNetTarget,
 		torch::optim::Optimizer& opt,
+		torch::optim::LRScheduler& lrs,
 		XPA& xpa,
 		float gamma,
 		float delta,

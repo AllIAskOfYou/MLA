@@ -6,6 +6,7 @@ PDQN::PDQN(
 	torch::nn::AnyModule qNet,
 	torch::nn::AnyModule qNetTarget,
 	torch::optim::Optimizer& opt,
+	torch::optim::LRScheduler& lrs,
 	XPA& xpa,
 	float gamma,
 	float delta,
@@ -18,6 +19,7 @@ PDQN::PDQN(
 		qNet,
 		qNetTarget,
 		opt,
+		lrs,
 		xpa,
 		gamma,
 		delta,
@@ -58,6 +60,7 @@ void PDQN::update() {
 	pes.update(indexes, err.detach());
 
 	// calculate loss and update parameters
+	std::cout << "W: " << weights.sizes() << "ERR: " << err.sizes() << std::endl;
 	loss = (weights * err.square()).sum();
 	loss.backward();
 	opt.step();

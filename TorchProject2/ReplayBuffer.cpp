@@ -28,6 +28,16 @@ void ReplayBuffer::push(
 	rewards.push(r);
 	terminal.push(t);
 
+	if ((int)t.item<float>() == 1) {
+		eStates.pushEmpty();
+		aStates.pushEmpty();
+		oStates.pushEmpty();
+		aActions.pushEmpty();
+		oActions.pushEmpty();
+		rewards.pushEmpty();
+		terminal.pushEmpty();
+	}
+
 	update_steps++;
 }
 

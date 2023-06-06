@@ -112,6 +112,7 @@ namespace md {
 			oa = oa.flatten(1);
 
 			at::Tensor x = torch::cat({ as, os, aa, oa }, -1);
+			//at::Tensor x = torch::cat({ as, oa }, -1);
 
 			//std::cout << "X: \n" << x << std::endl;
 			x = out->forward(x);
