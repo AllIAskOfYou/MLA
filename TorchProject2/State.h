@@ -9,6 +9,8 @@ typedef struct State {
 	at::Tensor aActions;	// agent action
 	at::Tensor oActions;	// oponent action
 
+	//at::Tensor nOAtions;	// next opponent action pred
+
 public:
 	State inverse() {
 		State state;

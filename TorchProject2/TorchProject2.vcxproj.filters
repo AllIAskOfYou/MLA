@@ -61,6 +61,9 @@
     <ClCompile Include="LinearLRS.cpp">
       <Filter>Source Files\schedulers</Filter>
     </ClCompile>
+    <ClCompile Include="DQNA.cpp">
+      <Filter>Source Files\algorithms</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Source Files">
@@ -181,6 +184,9 @@
     </ClInclude>
     <ClInclude Include="LinearLRS.h">
       <Filter>Source Files\schedulers</Filter>
+    </ClInclude>
+    <ClInclude Include="DQNA.h">
+      <Filter>Source Files\algorithms</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

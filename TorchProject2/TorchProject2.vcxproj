@@ -181,6 +181,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <ClInclude Include="ConvBlock.h" />
     <ClInclude Include="ConvHead.h" />
     <ClInclude Include="DQN.h" />
+    <ClInclude Include="DQNA.h" />
     <ClInclude Include="dqn_main.h" />
     <ClInclude Include="DTensor.h" />
     <ClInclude Include="EpsilonGreedy.h" />
@@ -211,6 +212,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
   <ItemGroup>
     <ClCompile Include="Boltzmann.cpp" />
     <ClCompile Include="DQN.cpp" />
+    <ClCompile Include="DQNA.cpp" />
     <ClCompile Include="dqn_main.cpp" />
     <ClCompile Include="DTensor.cpp" />
     <ClCompile Include="EpsilonGreedy.cpp" />

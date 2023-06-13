@@ -30,16 +30,6 @@ DQN::DQN(
 	qNetTarget.ptr()->eval();
 }
 
-
-// s  - curent state
-// s' - next state
-// A  - all actions
-// a  - specific action
-// A' - all next actions
-// a' - specific next action
-// Q  - q value
-// Q' - q value from target net
-
 void DQN::update() {
 	//auto t0 = std::chrono::high_resolution_clock::now();
 
@@ -68,6 +58,15 @@ void DQN::update() {
 		pUpdateTimes++;
 	}
 }
+
+// s  - curent state
+// s' - next state
+// A  - all actions
+// a  - specific action
+// A' - all next actions
+// a' - specific next action
+// Q  - q value
+// Q' - q value from target net
 
 at::Tensor DQN::calculate_err(RBSample rs) {
 	// create a block where no_grad is active
