@@ -48,12 +48,14 @@ void DQNA::update() {
 
 	// calculate next oa
 	target_oa = oaNet.forward(rs.states).softmax(1);
-	target_oa = target_oa.index({ at::arange(batch_size), rs.nStates.oActions.flatten() });
+	target_oa = target_oa.index(
+		{ at::arange(batch_size), rs.nStates.oActions.index({at::indexing::Slice(), -1}) }
+	);
 
 	//target_oa_next = oaNet.forward(rs.nStates);
 
 	// add intrinsic reward to the extrinsic reward
-	//std::cout << "Intrinsic: " << target_oa.detach()[0] << " : " << rs.nStates.oActions.flatten()[0] << std::endl;
+	std::cout << "Intrinsic: " << target_oa.detach()[0].item<float>() << " : " << rs.nStates.oActions.flatten()[0].item<int>() << std::endl;
 	rs.rewards += ro * (1 - target_oa.detach());
 
 	// calculate action pred loss

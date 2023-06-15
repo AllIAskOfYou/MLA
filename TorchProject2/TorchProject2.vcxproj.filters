@@ -64,6 +64,9 @@
     <ClCompile Include="DQNA.cpp">
       <Filter>Source Files\algorithms</Filter>
     </ClCompile>
+    <ClCompile Include="ICMNet.h">
+      <Filter>Source Files\models</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Source Files">
@@ -187,6 +190,18 @@
     </ClInclude>
     <ClInclude Include="DQNA.h">
       <Filter>Source Files\algorithms</Filter>
+    </ClInclude>
+    <ClInclude Include="DenseHead.h">
+      <Filter>Source Files\models</Filter>
+    </ClInclude>
+    <ClInclude Include="FNet.h">
+      <Filter>Source Files\models</Filter>
+    </ClInclude>
+    <ClInclude Include="ANet.h">
+      <Filter>Source Files\models</Filter>
+    </ClInclude>
+    <ClInclude Include="SNet.h">
+      <Filter>Source Files\models</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

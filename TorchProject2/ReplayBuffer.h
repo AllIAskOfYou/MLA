@@ -17,9 +17,10 @@ public:
 
 	void push(
 		at::Tensor es, at::Tensor as, at::Tensor os,
-		at::Tensor aa, at::Tensor oa, at::Tensor r,
+		at::Tensor aa_out, at::Tensor aa, at::Tensor oa, at::Tensor r,
 		at::Tensor t
 	);
+	void ReplayBuffer::pushEmpty();
 
 	RBSample sample(int64_t batchSize);
 
@@ -33,6 +34,7 @@ private:
 	DTensor eStates;
 	DTensor aStates;
 	DTensor oStates;
+	DTensor aActionsOut;
 	DTensor aActions;
 	DTensor oActions;
 	DTensor rewards;

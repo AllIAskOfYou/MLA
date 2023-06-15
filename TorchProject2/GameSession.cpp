@@ -17,6 +17,7 @@ GameSession::GameSession(
 	es = at::zeros({ es_n });
 	as = at::zeros({ as_n });
 	os = at::zeros({ as_n });
+	aa_out = at::zeros({ 1 });
 	aa = at::zeros({ 1 });
 	oa = at::zeros({ 1 });
 	r = at::zeros({ 1 });
@@ -58,6 +59,9 @@ void GameSession::start() {
 		case 4:
 			selfPlay();
 			break;
+		case 5:
+			reset();
+			break;
 		}
 	}
 }
@@ -67,15 +71,22 @@ void GameSession::push() {
 	readES = ps.recieveData(es.data_ptr<float>(), es_n);
 	readAS = ps.recieveData(as.data_ptr<float>(), as_n);
 	readOS = ps.recieveData(os.data_ptr<float>(), as_n);
-	readA = ps.recieveData(oa.data_ptr<float>(), 1);
+	readAA = ps.recieveData(aa.data_ptr<float>(), 1);
+	readOA = ps.recieveData(oa.data_ptr<float>(), 1);
 	readR = ps.recieveData(r.data_ptr<float>(), 1);
 	readT = ps.recieveData(t.data_ptr<float>(), 1);
 
 	// if bad data, continue
-	if (readES <= 0 || readAS <= 0 || readOS <= 0 ||readA <= 0 || readR <= 0 || readT <= 0) return;
+	if (readES <= 0 || 
+		readAS <= 0 || 
+		readOS <= 0 || 
+		readAA <= 0 || 
+		readOA <= 0 || 
+		readR <= 0 || 
+		readT <= 0) return;
 
 	// save new state, actions and reward
-	rla.push(es, as, os, aa, oa, r, t);
+	rla.push(es, as, os, aa_out, aa, oa, r, t);
 }
 
 void GameSession::update() {
@@ -89,11 +100,11 @@ void GameSession::update() {
 
 void GameSession::nextAction() {
 	// get next action based on current policy and data
-	aa = rla.nextAction();
-	aa = aa.to(at::kFloat);
+	aa_out = rla.nextAction();
+	aa_out = aa_out.to(at::kFloat);
 
 	// send new action to the game
-	ps.sendData(aa.data_ptr<float>(), aa.numel());
+	ps.sendData(aa_out.data_ptr<float>(), aa_out.numel());
 }
 
 void GameSession::selfPlay() {
@@ -103,4 +114,8 @@ void GameSession::selfPlay() {
 
 	// send new action to the game
 	ps.sendData(oa.data_ptr<float>(), oa.numel());
+}
+
+void GameSession::reset() {
+	rla.reset();
 }

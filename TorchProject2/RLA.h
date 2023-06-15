@@ -16,13 +16,18 @@ public:
 		at::Tensor es,
 		at::Tensor as,
 		at::Tensor os,
+		at::Tensor aa_out,
 		at::Tensor aa,
 		at::Tensor oa,
 		at::Tensor r,
 		at::Tensor t
 	)
 	{
-		rb.push(es, as, os, aa, oa, r, t);
+		rb.push(es, as, os, aa_out, aa, oa, r, t);
+	}
+
+	void reset() {
+		rb.pushEmpty();
 	}
 
 public:

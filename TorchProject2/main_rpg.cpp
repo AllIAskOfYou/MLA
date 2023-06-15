@@ -33,13 +33,18 @@ int main_rpg() {
 	);
 
 
-	torch::nn::AnyModule oaNet(
-		md::QNetConv(es_n, as_n, a_n, last_n, 4, 8, 4, dims, pools, units)
+
+	std::vector<int64_t> units_f = { 16 };
+	std::vector<int64_t> units_a = { 32 };
+	std::vector<int64_t> units_s = { 16 };
+
+	torch::nn::AnyModule iCMNet(
+		md::ICMNet(es_n, as_n, a_n, last_n, 4, 16, units_f, units_a, units_s)
 	);
 
 	std::vector<at::Tensor> param1, param2, joinedParameters;
 	param1 = qNet.ptr()->parameters();
-	param2 = oaNet.ptr()->parameters();
+	param2 = iCMNet.ptr()->parameters();
 	joinedParameters.reserve(param1.size() + param2.size());
 	joinedParameters.insert(joinedParameters.end(), param1.begin(), param1.end());
 	joinedParameters.insert(joinedParameters.end(), param2.begin(), param2.end());
@@ -58,8 +63,8 @@ int main_rpg() {
 	PESampler pes(buffer_size, 0.6, 0.5);
 
 	//PDQN dqn(rb, batch_size, qNet, qNetTarget, opt, xpa, 0, 0.98, 0, pes);
-	//DQN dqn(rb, batch_size, qNet, qNetTarget, opt, lrs, xpa, 0.9, 0.995, 0);
-	DQNA dqn(rb, batch_size, qNet, qNetTarget, opt, lrs, xpa, 0.9, 0.995, 0, oaNet, 1, 5);
+	DQN dqn(rb, batch_size, qNet, qNetTarget, opt, lrs, xpa, 0.9, 0.995, 0);
+	//DQNA dqn(rb, batch_size, qNet, qNetTarget, opt, lrs, xpa, 0.9, 0.995, 0, iCMNet, 1, 5);
 
 	GameSession gs(es_n, as_n, a_n, dqn, max_iter);
 	gs.start();

@@ -26,6 +26,7 @@ public:
 		at::Tensor es,
 		at::Tensor as,
 		at::Tensor os,
+		at::Tensor aa_out,
 		at::Tensor aa,
 		at::Tensor oa,
 		at::Tensor r,

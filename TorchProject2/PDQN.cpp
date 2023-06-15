@@ -32,13 +32,14 @@ void PDQN::push (
 	at::Tensor es,
 	at::Tensor as,
 	at::Tensor os,
+	at::Tensor aa_out,
 	at::Tensor aa,
 	at::Tensor oa,
 	at::Tensor r,
 	at::Tensor t
 )
 {
-	DQN::push(es, as, os, aa, oa, r, t);
+	DQN::push(es, as, os, aa_out, aa, oa, r, t);
 	pes.push();
 }
 

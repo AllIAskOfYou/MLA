@@ -177,14 +177,17 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     </ProjectReference>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="ANet.h" />
     <ClInclude Include="Boltzmann.h" />
     <ClInclude Include="ConvBlock.h" />
     <ClInclude Include="ConvHead.h" />
+    <ClInclude Include="DenseHead.h" />
     <ClInclude Include="DQN.h" />
     <ClInclude Include="DQNA.h" />
     <ClInclude Include="dqn_main.h" />
     <ClInclude Include="DTensor.h" />
     <ClInclude Include="EpsilonGreedy.h" />
+    <ClInclude Include="FNet.h" />
     <ClInclude Include="GameSession.h" />
     <ClInclude Include="LinearLRS.h" />
     <ClInclude Include="main_rpg.h" />
@@ -201,6 +204,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <ClInclude Include="PipeServer.h" />
     <ClInclude Include="QNetState.h" />
     <ClInclude Include="RBSample.h" />
+    <ClInclude Include="SNet.h" />
     <ClInclude Include="State.h" />
     <ClInclude Include="ReplayBuffer.h" />
     <ClInclude Include="RLA.h" />
@@ -218,6 +222,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <ClCompile Include="EpsilonGreedy.cpp" />
     <ClCompile Include="example-app.cpp" />
     <ClCompile Include="GameSession.cpp" />
+    <ClCompile Include="ICMNet.h" />
     <ClCompile Include="LinearLRS.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="main_caller.cpp" />

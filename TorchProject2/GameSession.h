@@ -28,6 +28,7 @@ private:
 	void update();
 	void nextAction();
 	void selfPlay();
+	void reset();
 
 private:
 	// states dimension or number of features
@@ -44,13 +45,14 @@ private:
 	at::Tensor es;
 	at::Tensor as;
 	at::Tensor os;
+	at::Tensor aa_out;
 	at::Tensor aa;
 	at::Tensor oa;
 	at::Tensor r;
 	at::Tensor t;
 
 	// number of units read
-	int readReq, readES, readAS, readOS, readA, readR, readT;
+	int readReq, readES, readAS, readOS, readAA, readOA, readR, readT;
 
 	// pipe server routes for comunication with a game process
 	PipeServer ps;

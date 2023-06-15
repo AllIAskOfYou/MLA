@@ -20,6 +20,8 @@ int mainImpl() {
 	at::Tensor oa = at::tensor({ 2 }, torch::dtype(torch::kInt64));
 	at::Tensor r = at::tensor({ 0 }, torch::dtype(torch::kFloat32));
 
+	/*
+
 	ReplayBuffer rb(buffer_size, last_n, es_n, as_n);
 	rb.push(s, s, s, aa, oa, r, r);
 	rb.push(s, s, s, aa, oa, r+1, r);
@@ -38,7 +40,7 @@ int mainImpl() {
 	std::cout << "Yay" << std::endl;
 
 	EpsilonGreedy xpa(1, 0.1, 0.98);
-
+	*/
 	//DQN dqn(rb, batch_size, qNet, qNetTarget, opt, xpa, 0.9, 0.99, 0);
 	std::cout << "Yay" << std::endl;
 	

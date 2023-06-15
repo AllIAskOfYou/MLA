@@ -22,12 +22,7 @@ namespace md {
 			std::vector<bool> pools,
 			std::vector<int64_t> units
 		) :
-			bn_es(torch::nn::BatchNorm1d(es_n)),
-			bn_as(torch::nn::BatchNorm1d(as_n)),
-			lin_es(torch::nn::Linear(es_n, es_emb)),
-			lin_as(torch::nn::Linear(as_n, as_emb)),
 			emb(torch::nn::Embedding(a_n, a_emb)),
-			conv_es(ConvHead(es_emb, dims, pools)),
 			conv_as(ConvHead(as_n, dims, pools)),
 			conv_a(ConvHead(a_emb, dims, pools)),
 			out(torch::nn::Sequential())
@@ -45,12 +40,7 @@ namespace md {
 				out->push_back(torch::nn::Linear(units[i - 1], units[i]));
 			}
 
-			register_module("bn_es", bn_es);
-			register_module("bn_as", bn_as);
-			register_module("lin_es", lin_es);
-			register_module("lin_as", lin_as);
 			register_module("emb", emb);
-			register_module("conv_es", conv_es);
 			register_module("conv_as", conv_as);
 			register_module("conv_a", conv_a);
 			register_module("out", out);
@@ -124,12 +114,7 @@ namespace md {
 			return x;
 		}
 
-		torch::nn::BatchNorm1d bn_es;
-		torch::nn::BatchNorm1d bn_as;
-		torch::nn::Linear lin_es;
-		torch::nn::Linear lin_as;
 		torch::nn::Embedding emb;
-		ConvHead conv_es;
 		ConvHead conv_as;
 		ConvHead conv_a;
 		torch::nn::Sequential out;

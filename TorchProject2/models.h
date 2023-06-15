@@ -5,3 +5,4 @@
 #include "QNetBasic.h"
 #include "QNetConv.h"
 #include "ConvHead.h"
+#include "ICMNet.h"
