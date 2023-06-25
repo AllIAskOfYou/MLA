@@ -123,9 +123,18 @@ at::Tensor DQN::nextAction() {
 	at::Tensor nAction = xpa.nextAction(out);
 
 	// update exploration method
-	if (rb.update_steps >= batch_size) {
+	if (rb.update_steps >= 5000) {
 		xpa.update();
 		//std::cout << state.aStates << std::endl;
+	}
+
+	float r = rb.get_acc_reward(5000);
+
+	if (rb.update_steps >= 5000 && r > bestReward) {
+		std::cout << "New Best Reward: " << r << std::endl;
+		torch::save(qNet.ptr(), "C:\\Users\\mange\\Desktop\\Logs\\qNet.pt");
+		torch::save(qNetTarget.ptr(), "C:\\Users\\mange\\Desktop\\Logs\\qNetTarget.pt");
+		bestReward = r;
 	}
 
 	return nAction;

@@ -20,7 +20,9 @@ void ReplayBuffer::push(
 	at::Tensor aa_out, at::Tensor aa, at::Tensor oa,at::Tensor r,
 	at::Tensor t)
 {
-	std::cout << "Step: " << update_steps << std::endl;
+	if (update_steps % 1000 == 0) {
+		std::cout << "Step: " << update_steps << std::endl;
+	}
 	eStates.push(es);
 	aStates.push(as);
 	oStates.push(os);

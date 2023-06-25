@@ -28,6 +28,9 @@ public:
 	State get(int64_t index);
 	RBSample get_sample(at::Tensor idx);
 	int64_t get_size() { return size; }
+	float get_acc_reward(int n) {
+		return rewards.index(at::arange(-n, 0)).mean().item<float>();
+	}
 
 private:
 	int64_t size;

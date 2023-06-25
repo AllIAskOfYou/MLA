@@ -3,6 +3,7 @@
 #include <torch/torch.h>
 #include "DQN.h"
 #include "XPA.h"
+#include "ICMReturn.h"
 
 class DQNA : public DQN {
 public:
@@ -17,10 +18,9 @@ public:
 		float gamma,
 		float delta,
 		int pUpdateWait,
-		torch::nn::AnyModule oaNet,
-		//torch::optim::Optimizer& oaNetOpt,
-		//torch::optim::LRScheduler& oaNetLrs,
+		torch::nn::AnyModule iCMNet,
 		float lambda,
+		float beta,
 		float ro
 	);
 
@@ -28,11 +28,11 @@ public:
 	void update() override;
 
 private:
-	torch::nn::AnyModule oaNet;
-	//torch::optim::Optimizer& oaNetOpt;
-	//torch::optim::LRScheduler& oaNetLrs;
+	torch::nn::AnyModule iCMNet;
 	// extrinsic update factor
 	float lambda;
+	// inverse vs forward module update ratio
+	float beta;
 	// intrinsic reward factor
 	float ro;
 };

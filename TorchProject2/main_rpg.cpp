@@ -35,11 +35,14 @@ int main_rpg() {
 
 
 	std::vector<int64_t> units_f = { 16 };
-	std::vector<int64_t> units_a = { 32 };
+	std::vector<int64_t> units_a = { 16 };
 	std::vector<int64_t> units_s = { 16 };
 
 	torch::nn::AnyModule iCMNet(
-		md::ICMNet(es_n, as_n, a_n, last_n, 4, 16, units_f, units_a, units_s)
+		md::ICMNet(
+			es_n, as_n, a_n, last_n,
+			8, 4,						// s_emb, a_emb
+			units_f, units_a, units_s)
 	);
 
 	std::vector<at::Tensor> param1, param2, joinedParameters;
@@ -52,10 +55,11 @@ int main_rpg() {
 	//torch::nn::AnyModule qNet(md::QNetState(s_n, a_n, last_n));
 	//torch::nn::AnyModule qNetTarget(md::QNetState(s_n, a_n, last_n));
 
-	//torch::optim::Adam opt(qNet.ptr()->parameters(), torch::optim::AdamOptions(0.0001));
-	torch::optim::Adam opt(joinedParameters, torch::optim::AdamOptions(0.0001));
+	torch::optim::Adam opt(qNet.ptr()->parameters(), torch::optim::AdamOptions(0.00001));
+	//torch::optim::Adam opt(joinedParameters, torch::optim::AdamOptions(0.0001));
+	//torch::optim::Adam opt(joinedParameters, torch::optim::AdamOptions(0.0001));
 
-	LinearLRS lrs(opt, 100, 1, 0.01, 2*buffer_size);
+	LinearLRS lrs(opt, 100, 1, 0.001, 10*buffer_size);
 
 	EpsilonGreedy xpa(1, 0.1, 3*buffer_size);
 	//Boltzmann xpa(10, 0.5, 0.99);
@@ -64,7 +68,7 @@ int main_rpg() {
 
 	//PDQN dqn(rb, batch_size, qNet, qNetTarget, opt, xpa, 0, 0.98, 0, pes);
 	DQN dqn(rb, batch_size, qNet, qNetTarget, opt, lrs, xpa, 0.9, 0.995, 0);
-	//DQNA dqn(rb, batch_size, qNet, qNetTarget, opt, lrs, xpa, 0.9, 0.995, 0, iCMNet, 1, 5);
+	//DQNA dqn(rb, batch_size, qNet, qNetTarget, opt, lrs, xpa, 0.9, 0.995, 0, iCMNet, 0.1, 0.2, 0);
 
 	GameSession gs(es_n, as_n, a_n, dqn, max_iter);
 	gs.start();

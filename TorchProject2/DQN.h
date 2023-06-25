@@ -44,5 +44,6 @@ protected:
 	float gamma, delta;
 	int pUpdateWait;
 	int pUpdateTimes = 0;
+	float bestReward = -1000;
 };
 

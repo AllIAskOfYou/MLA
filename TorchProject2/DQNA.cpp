@@ -11,10 +11,9 @@ DQNA::DQNA(
 	float gamma,
 	float delta,
 	int pUpdateWait,
-	torch::nn::AnyModule oaNet,
-	//torch::optim::Optimizer& oaNetOpt,
-	//torch::optim::LRScheduler& oaNetLrs
+	torch::nn::AnyModule iCMNet,
 	float lambda,
+	float beta,
 	float ro
 ) :
 	DQN(
@@ -29,10 +28,9 @@ DQNA::DQNA(
 		delta,
 		pUpdateWait
 	),
-	oaNet(oaNet),
-	//oaNetOpt(oaNetOpt),
-	//oaNetLrs(oaNetLrs),
+	iCMNet(iCMNet),
 	lambda(lambda),
+	beta(beta),
 	ro(ro)
 {}
 
@@ -40,33 +38,43 @@ void DQNA::update() {
 	// sample one batch from replay buffer
 	RBSample rs = rb.sample(batch_size);
 
-	at::Tensor err, loss, target_oa, target_oa_next, oa_loss, rewards;
+	at::Tensor err, a_pred, loss, loss_inv, loss_fw;
 
 	// zero the grads
 	opt.zero_grad();
-	//oaNetOpt.zero_grad();
 
 	// calculate next oa
-	target_oa = oaNet.forward(rs.states).softmax(1);
-	target_oa = target_oa.index(
-		{ at::arange(batch_size), rs.nStates.oActions.index({at::indexing::Slice(), -1}) }
-	);
+	ICMReturn out = iCMNet.forward<ICMReturn>(rs);
 
-	//target_oa_next = oaNet.forward(rs.nStates);
+	// inverse module
+	a_pred = out.aPred.softmax(1);
+	a_pred = a_pred.index(
+		{ at::arange(batch_size), rs.nStates.aActions.index({at::indexing::Slice(), -1}) }
+	);
+	loss_inv = -a_pred.log().mean();
+
+	// forward module
+	if (rb.update_steps == 10000) {
+		std::cout << out.sNext << std::endl;
+		std::cout << out.sNextPred << std::endl;
+	}
+	loss_fw = 0.5 * (out.sNext - out.sNextPred).square().sum(1).sqrt();
 
 	// add intrinsic reward to the extrinsic reward
-	std::cout << "Intrinsic: " << target_oa.detach()[0].item<float>() << " : " << rs.nStates.oActions.flatten()[0].item<int>() << std::endl;
-	rs.rewards += ro * (1 - target_oa.detach());
+	if (rb.update_steps % 100 == 0) {
+		std::cout << "APred: " << a_pred.detach().mean().item<float>() << std::endl;
+		std::cout << "Inv-Loss: " << loss_fw.mean().item<float>() << std::endl;
+	}
+	rs.rewards += ro * loss_fw.detach();
 
-	// calculate action pred loss
-	oa_loss = -target_oa.log().mean();// torch::nn::CrossEntropyLoss()(target_oa, rs.nStates.oActions);
+	loss_fw = loss_fw.mean();
 
 	// calculate q err
 	err = calculate_err(rs);
 	loss = err.square().mean();
 
 	// join loss
-	loss = lambda * loss + oa_loss;
+	loss = lambda * loss + (1 - lambda) * ((1 - beta) * loss_inv + beta * loss_fw);
 	loss.backward();
 	opt.step();
 	lrs.step();
