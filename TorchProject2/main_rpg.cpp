@@ -11,11 +11,11 @@
 
 int main_rpg() {
 	int64_t es_n = 1;
-	int64_t as_n = 5;
+	int64_t as_n = 7;
 	int64_t a_n = 6;
-	int64_t last_n = 1;					// 1 -> 16,		Update time: 16 ms -> 32 ms		TURBO: 24 ms
+	int64_t last_n = 1;						// 1 -> 16,		Update time: 16 ms -> 32 ms		TURBO: 24 ms
 	int64_t batch_size = 128;				// 128 -> 512,	Update time: 14.7 ms -> 16.4 ms
-	int64_t buffer_size = 10000;			// Didn't change from 128 -> 1024
+	int64_t buffer_size = 10000;				// Didn't change from 128 -> 1024
 	int64_t max_iter = 1000; // legacy
 
 	std::vector<int64_t> dims = { 16 };
@@ -23,7 +23,7 @@ int main_rpg() {
 	std::vector<int64_t> units = { 64, a_n };
 
 
-	ReplayBuffer rb(buffer_size, last_n, es_n, as_n);
+	ReplayBuffer rb(buffer_size, last_n, es_n, as_n, a_n);
 
 	torch::nn::AnyModule qNet(
 		md::QNetConv(es_n, as_n, a_n, last_n, 4, 8, 4, dims, pools, units)
@@ -34,14 +34,14 @@ int main_rpg() {
 
 
 
-	std::vector<int64_t> units_f = { 16 };
-	std::vector<int64_t> units_a = { 16 };
-	std::vector<int64_t> units_s = { 16 };
+	std::vector<int64_t> units_f = { 32, 32 };
+	std::vector<int64_t> units_a = { 32, 32 };
+	std::vector<int64_t> units_s = { 32, 32 };
 
 	torch::nn::AnyModule iCMNet(
 		md::ICMNet(
 			es_n, as_n, a_n, last_n,
-			8, 4,						// s_emb, a_emb
+			16, 8,						// s_emb, a_emb
 			units_f, units_a, units_s)
 	);
 
@@ -55,20 +55,26 @@ int main_rpg() {
 	//torch::nn::AnyModule qNet(md::QNetState(s_n, a_n, last_n));
 	//torch::nn::AnyModule qNetTarget(md::QNetState(s_n, a_n, last_n));
 
-	torch::optim::Adam opt(qNet.ptr()->parameters(), torch::optim::AdamOptions(0.00001));
+	//torch::optim::Adam opt(qNet.ptr()->parameters(), torch::optim::AdamOptions(0.00001));
 	//torch::optim::Adam opt(joinedParameters, torch::optim::AdamOptions(0.0001));
 	//torch::optim::Adam opt(joinedParameters, torch::optim::AdamOptions(0.0001));
 
-	LinearLRS lrs(opt, 100, 1, 0.001, 10*buffer_size);
+	torch::optim::Adam opt1(param1, torch::optim::AdamOptions(0.00001));
+	torch::optim::Adam opt2(param2, torch::optim::AdamOptions(0.00001));
 
-	EpsilonGreedy xpa(1, 0.1, 3*buffer_size);
+	LinearLRS lrs1(opt1, 100, 1, 0.001, 30 * buffer_size);
+	LinearLRS lrs2(opt2, 100, 1, 0.001, 30 * buffer_size);
+
+	//EpsilonGreedy xpa(1, 0.1, 3*buffer_size);
+	EpsilonGreedy xpa(1, 0.1, 5000);
+	xpa.update();
 	//Boltzmann xpa(10, 0.5, 0.99);
 
 	PESampler pes(buffer_size, 0.6, 0.5);
 
 	//PDQN dqn(rb, batch_size, qNet, qNetTarget, opt, xpa, 0, 0.98, 0, pes);
-	DQN dqn(rb, batch_size, qNet, qNetTarget, opt, lrs, xpa, 0.9, 0.995, 0);
-	//DQNA dqn(rb, batch_size, qNet, qNetTarget, opt, lrs, xpa, 0.9, 0.995, 0, iCMNet, 0.1, 0.2, 0);
+	//DQN dqn(rb, batch_size, qNet, qNetTarget, opt, lrs, xpa, 0.9, 0.995, 0);
+	DQNA dqn(rb, batch_size, qNet, qNetTarget, opt1, lrs1, opt2, lrs2, xpa, 0.9, 0.995, 0, iCMNet, 0.1, 0.3, 0);
 
 	GameSession gs(es_n, as_n, a_n, dqn, max_iter);
 	gs.start();

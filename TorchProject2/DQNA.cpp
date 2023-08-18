@@ -5,8 +5,10 @@ DQNA::DQNA(
 	int64_t batch_size,
 	torch::nn::AnyModule qNet,
 	torch::nn::AnyModule qNetTarget,
-	torch::optim::Optimizer& opt,
-	torch::optim::LRScheduler& lrs,
+	torch::optim::Optimizer& opt1,
+	torch::optim::LRScheduler& lrs1,
+	torch::optim::Optimizer& opt2,
+	torch::optim::LRScheduler& lrs2,
 	XPA& xpa,
 	float gamma,
 	float delta,
@@ -21,8 +23,8 @@ DQNA::DQNA(
 		batch_size,
 		qNet,
 		qNetTarget,
-		opt,
-		lrs,
+		opt1,
+		lrs1,
 		xpa,
 		gamma,
 		delta,
@@ -31,14 +33,17 @@ DQNA::DQNA(
 	iCMNet(iCMNet),
 	lambda(lambda),
 	beta(beta),
-	ro(ro)
+	ro(ro),
+	opt2(opt2),
+	lrs2(lrs2)
 {}
 
 void DQNA::update() {
+	
 	// sample one batch from replay buffer
 	RBSample rs = rb.sample(batch_size);
 
-	at::Tensor err, a_pred, loss, loss_inv, loss_fw;
+	at::Tensor err, a_pred, loss, loss_inv, loss_fw, loss_icm, r_int;
 
 	// zero the grads
 	opt.zero_grad();
@@ -49,7 +54,7 @@ void DQNA::update() {
 	// inverse module
 	a_pred = out.aPred.softmax(1);
 	a_pred = a_pred.index(
-		{ at::arange(batch_size), rs.nStates.aActions.index({at::indexing::Slice(), -1}) }
+		{ at::arange(batch_size), rs.nStates.joinActions.index({at::indexing::Slice(), -1}) }
 	);
 	loss_inv = -a_pred.log().mean();
 
@@ -60,12 +65,22 @@ void DQNA::update() {
 	}
 	loss_fw = 0.5 * (out.sNext - out.sNextPred).square().sum(1).sqrt();
 
+	// batch normalize intrinsic rewards
+	r_int = loss_fw.detach();
+	r_int = (r_int - r_int.mean()) / r_int.std();
+
+	// ne dela
+	
+
 	// add intrinsic reward to the extrinsic reward
 	if (rb.update_steps % 100 == 0) {
 		std::cout << "APred: " << a_pred.detach().mean().item<float>() << std::endl;
 		std::cout << "Inv-Loss: " << loss_fw.mean().item<float>() << std::endl;
 	}
-	rs.rewards += ro * loss_fw.detach();
+	float lrr = (1 - rb.update_steps / 30000);
+	lrr = lrr < 0 ? 0 : lrr;
+	r_int = lrr * r_int;
+	rs.rewards += ro * r_int;
 
 	loss_fw = loss_fw.mean();
 
@@ -74,11 +89,18 @@ void DQNA::update() {
 	loss = err.square().mean();
 
 	// join loss
-	loss = lambda * loss + (1 - lambda) * ((1 - beta) * loss_inv + beta * loss_fw);
+	loss_icm = (1 - beta) * loss_inv + beta * loss_fw;
+	
+	// ne dela
+	
 	loss.backward();
+	loss_icm.backward();	// to zakomentiraj za random
 	opt.step();
 	lrs.step();
+	opt2.step();
+	lrs2.step();
 
+	
 	// update target net parameters to be more like online net
 	if (pUpdateTimes == pUpdateWait) {
 		update_params(delta);
@@ -87,4 +109,5 @@ void DQNA::update() {
 	else {
 		pUpdateTimes++;
 	}
+	
 }

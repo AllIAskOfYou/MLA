@@ -13,7 +13,7 @@
 class ReplayBuffer {
 public:
 	ReplayBuffer() {};
-	ReplayBuffer(int64_t size, int64_t last_n, int64_t es_n, int64_t as_n);
+	ReplayBuffer(int64_t size, int64_t last_n, int64_t es_n, int64_t as_n, int64_t a_n);
 
 	void push(
 		at::Tensor es, at::Tensor as, at::Tensor os,
@@ -34,6 +34,7 @@ public:
 
 private:
 	int64_t size;
+	int64_t a_n;
 	DTensor eStates;
 	DTensor aStates;
 	DTensor oStates;

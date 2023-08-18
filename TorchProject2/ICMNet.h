@@ -27,9 +27,9 @@ namespace md {
 			std::vector<int64_t> units_a,
 			std::vector<int64_t> units_s
 		) :
-			emb_a(torch::nn::Embedding(a_n, a_emb)),
+			emb_a(torch::nn::Embedding(a_n * a_n, a_emb)),
 			fnet(FNet(as_n, s_emb, units_f)),
-			anet(ANet(s_emb, a_n, units_a)),
+			anet(ANet(s_emb, a_n * a_n, units_a)),
 			snet(SNet(s_emb, a_emb, units_s))
 		{
 			register_module("emb_a", emb_a);
@@ -54,7 +54,7 @@ namespace md {
 			//std::cout << "a_pred: " << a_pred.sizes() << std::endl;
 
 			// embed actions
-			auto a_emb = emb_a(smpl.nStates.aActions.index({ at::indexing::Slice(), -1 }));
+			auto a_emb = emb_a(smpl.nStates.joinActions.index({ at::indexing::Slice(), -1 }));
 			//std::cout << "a_emb: " << a_emb.sizes() << std::endl;
 			auto s_next_pred = snet(s, a_emb);
 			//std::cout << "s_next_pred: " << s_next_pred.sizes() << std::endl;

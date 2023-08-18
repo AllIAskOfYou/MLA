@@ -8,6 +8,7 @@ typedef struct State {
 	at::Tensor oStates;		// oponent state
 	at::Tensor aActions;	// agent action
 	at::Tensor oActions;	// oponent action
+	at::Tensor joinActions; // joint action
 
 	//at::Tensor nOAtions;	// next opponent action pred
 
@@ -19,6 +20,7 @@ public:
 		state.oStates = aStates;
 		state.aActions = oActions;
 		state.oActions = aActions;
+		state.joinActions = joinActions;
 		return state;
 	}
 } State;

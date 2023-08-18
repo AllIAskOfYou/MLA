@@ -7,6 +7,7 @@
 
 class EpsilonGreedy : public XPA {
 public:
+	EpsilonGreedy(float epsilon);
 	EpsilonGreedy(float epsilon, float minEpsilon, float steps);
 
 	void update();

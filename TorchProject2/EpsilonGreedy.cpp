@@ -2,6 +2,14 @@
 #include <iostream>
 
 EpsilonGreedy::EpsilonGreedy(
+	float epsilon
+) :
+	epsilon(epsilon),
+	minEpsilon(0),
+	decay(1)
+{}
+
+EpsilonGreedy::EpsilonGreedy(
 	float epsilon,
 	float minEpsilon,
 	float steps
@@ -25,10 +33,12 @@ at::Tensor EpsilonGreedy::nextAction(at::Tensor qvalue) {
 	float rand_int = (float)(std::rand()) / (float)(RAND_MAX);
 	at::Tensor nAction;
 	if (rand_int > epsilon) {
+		std::cout << "Max" << std::endl;
 		nAction = qvalue.argmax(1);
 	}
 	else {
 		nAction = at::randint(0, qvalue.size(1), { 1 });
+		std::cout << "Random" << nAction.item<int>() << std::endl;
 	}
 	return nAction;
 }

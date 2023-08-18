@@ -1,8 +1,9 @@
 #include "ReplayBuffer.h"
 #include <iostream>
 
-ReplayBuffer::ReplayBuffer(int64_t size, int64_t last_n, int64_t es_n, int64_t as_n ) :
-	size(size)
+ReplayBuffer::ReplayBuffer(int64_t size, int64_t last_n, int64_t es_n, int64_t as_n, int64_t a_n ) :
+	size(size),
+	a_n(a_n)
 {
 	eStates = DTensor({ size + 1, last_n, es_n }, at::TensorOptions().dtype(c10::ScalarType::Float));
 	aStates = DTensor({ size + 1, last_n, as_n }, at::TensorOptions().dtype(c10::ScalarType::Float));
@@ -76,5 +77,6 @@ State ReplayBuffer::get(at::Tensor idx) {
 	state.aActions = aActions.index(idx);
 	state.oActions = oActions.index(idx);
 
+	state.joinActions = state.aActions * a_n + state.oActions;
 	return state;
 }

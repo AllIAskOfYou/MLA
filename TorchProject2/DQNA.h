@@ -12,8 +12,10 @@ public:
 		int64_t batch_size,
 		torch::nn::AnyModule qNet,
 		torch::nn::AnyModule qNetTarget,
-		torch::optim::Optimizer& opt,
-		torch::optim::LRScheduler& lrs,
+		torch::optim::Optimizer& opt1,
+		torch::optim::LRScheduler& lrs1,
+		torch::optim::Optimizer& opt2,
+		torch::optim::LRScheduler& lrs2,
 		XPA& xpa,
 		float gamma,
 		float delta,
@@ -35,4 +37,8 @@ private:
 	float beta;
 	// intrinsic reward factor
 	float ro;
+
+
+	torch::optim::Optimizer& opt2;
+	torch::optim::LRScheduler& lrs2;
 };

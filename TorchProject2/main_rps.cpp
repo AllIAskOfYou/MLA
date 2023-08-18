@@ -18,7 +18,7 @@ int main_rps() {
 	std::vector<int64_t> units = { 8, a_n };
 
 
-	ReplayBuffer rb(buffer_size, last_n, es_n, as_n);
+	ReplayBuffer rb(buffer_size, last_n, es_n, as_n, a_n);
 
 	/*
 	torch::nn::Linear l(2, 3);
