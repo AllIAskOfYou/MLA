@@ -20,18 +20,28 @@ int main_rpg() {
 
 	std::vector<int64_t> dims = { 16 };
 	std::vector<bool> pools = { false };
+	//std::vector<int64_t> units = { 64, 4*a_n };
 	std::vector<int64_t> units = { 64, a_n };
 
 
 	ReplayBuffer rb(buffer_size, last_n, es_n, as_n, a_n);
 
+	
 	torch::nn::AnyModule qNet(
 		md::QNetConv(es_n, as_n, a_n, last_n, 4, 8, 4, dims, pools, units)
 	);
 	torch::nn::AnyModule qNetTarget(
 		md::QNetConv(es_n, as_n, a_n, last_n, 4, 8, 4, dims, pools, units)
 	);
-
+	
+	/*
+	torch::nn::AnyModule qNet(
+		md::QNetDRON(es_n, as_n, a_n, last_n, 4, 8, 4, dims, pools, units)
+	);
+	torch::nn::AnyModule qNetTarget(
+		md::QNetDRON(es_n, as_n, a_n, last_n, 4, 8, 4, dims, pools, units)
+	);
+	*/
 
 
 	std::vector<int64_t> units_f = { 32, 32 };
@@ -51,6 +61,14 @@ int main_rpg() {
 	joinedParameters.reserve(param1.size() + param2.size());
 	joinedParameters.insert(joinedParameters.end(), param1.begin(), param1.end());
 	joinedParameters.insert(joinedParameters.end(), param2.begin(), param2.end());
+
+
+	int nparam(0);
+	for (size_t i = 0; i < param1.size(); i++) {
+		nparam += param1[i].numel();
+	}
+	std::cout << "Num Of Params: " << nparam << std::endl;
+
 
 	//torch::nn::AnyModule qNet(md::QNetState(s_n, a_n, last_n));
 	//torch::nn::AnyModule qNetTarget(md::QNetState(s_n, a_n, last_n));
@@ -74,7 +92,7 @@ int main_rpg() {
 
 	//PDQN dqn(rb, batch_size, qNet, qNetTarget, opt, xpa, 0, 0.98, 0, pes);
 	//DQN dqn(rb, batch_size, qNet, qNetTarget, opt, lrs, xpa, 0.9, 0.995, 0);
-	DQNA dqn(rb, batch_size, qNet, qNetTarget, opt1, lrs1, opt2, lrs2, xpa, 0.9, 0.995, 0, iCMNet, 0.1, 0.3, 0);
+	DQNA dqn(rb, batch_size, qNet, qNetTarget, opt1, lrs1, opt2, lrs2, xpa, 0.9, 0.995, 0, iCMNet, 0.1, 0.3, 1);
 
 	GameSession gs(es_n, as_n, a_n, dqn, max_iter);
 	gs.start();

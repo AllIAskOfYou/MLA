@@ -206,5 +206,8 @@
     <ClInclude Include="ICMNet.h">
       <Filter>Source Files\models</Filter>
     </ClInclude>
+    <ClInclude Include="QNetDRON.h">
+      <Filter>Source Files\models</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
